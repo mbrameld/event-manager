@@ -1,46 +1,32 @@
-import type { NextPage } from "next";
+import { Stack } from "@mui/material";
+import { NextPage } from "next";
+import UpcomingEvents from "../components/schedule/UpcomingEvents";
+import EventScheduler from "../components/schedule/EventScheduler";
+import Spinner from "../components/Spinner";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 
-const Home: NextPage = () => {
+const Schedule: NextPage = () => {
+  const session = useSession();
+
   return (
     <>
       <Head>
-        <title>Create T3 App</title>
+        <title>Event Manager</title>
         <meta name="description" content="Event Manager" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
-        <h1>
-          Create <span>T3</span> App
-        </h1>
+      {session.status === "loading" ? (
+        <Spinner />
+      ) : (
+        <Stack spacing={4}>
+          <UpcomingEvents userId={session.data?.user?.id || "Undefined"} />
 
-        <div>
-          <h3>This stack uses:</h3>
-          <ul>
-            <li>
-              <a href="https://nextjs.org" target="_blank" rel="noreferrer">
-                Next.js
-              </a>
-            </li>
-            <li>
-              <a href="https://trpc.io" target="_blank" rel="noreferrer">
-                tRPC
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://typescriptlang.org"
-                target="_blank"
-                rel="noreferrer"
-              >
-                TypeScript
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
+          <EventScheduler userId={session.data?.user?.id || "Undefined"} />
+        </Stack>
+      )}
     </>
   );
 };
 
-export default Home;
+export default Schedule;
