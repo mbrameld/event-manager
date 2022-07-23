@@ -11,7 +11,7 @@ export const eventRouter = createRouter()
     async resolve({ ctx, input }) {
       return await ctx.prisma.scheduledEvent.findMany({
         include: { ambassador: { select: { name: true, email: true } } },
-        where: { onwerId: input.ownerId },
+        where: { ownerId: input.ownerId },
         orderBy: { startTime: "asc" },
       });
     },
@@ -107,7 +107,7 @@ export const eventRouter = createRouter()
 
       return await ctx.prisma.scheduledEvent.create({
         data: {
-          onwerId: input.ownerId,
+          ownerId: input.ownerId,
           ambassadorId: ambIdWithAvail,
           eventType: input.eventType,
           startTime: input.startTime,
