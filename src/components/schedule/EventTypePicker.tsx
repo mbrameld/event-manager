@@ -16,7 +16,7 @@ function EventTypePicker({
     ["Staff Education", "Vendor Day"],
     false,
     undefined,
-  ];
+  ]; //TODO
 
   if (loading || availableTypes.length === 0) return <Spinner />;
   if (error)

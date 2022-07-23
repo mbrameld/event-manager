@@ -12,7 +12,7 @@ function EventDurationPicker({
   selectedDuration: number | undefined;
   onSelectedDurationChange: (duration: number) => void;
 }) {
-  const [availableDurations, loading, error] = [[2, 3, 4, 8], false, undefined];
+  const [availableDurations, loading, error] = [[2, 3, 4, 8], false, undefined]; //TODO
 
   if (loading) {
     return <Spinner />;
