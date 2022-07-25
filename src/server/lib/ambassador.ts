@@ -121,22 +121,27 @@ export const calculateFreeHours = (
             intervalHours.add(h);
           }
         }
+        console.log("AVAILABLE", intervalHours);
         // For each exception on this day, remove hours
         const exceptionsOnThisDay =
           s.exceptions.get(startOfDay(d).valueOf()) ?? [];
         for (let exception of exceptionsOnThisDay) {
           for (let h = exception.startHour; h < exception.endHour; h++) {
+            console.log("Removing", h);
             intervalHours.delete(h);
           }
         }
+        console.log("AFTER EX", intervalHours);
         // For each scheduled event on this day, remove hours
         const eventsOnThisDay =
           s.scheduledEvents.get(startOfDay(d).valueOf()) ?? [];
         for (let event of eventsOnThisDay) {
           for (let h = event.startHour; h < event.endHour; h++) {
+            console.log("Removing", h);
             intervalHours.delete(h);
           }
         }
+        console.log("AFTER SE", intervalHours);
         return Array.from(intervalHours);
       });
       return [d.getDate(), hours] as const;

@@ -19,6 +19,7 @@
 - Error handling/messages
 - Don't allow booking same day?
 - More tests
+- Factor out duplicate logic between building free hours and assigning ambassadors
 
 # Ambassador schedules timezone awareness
 

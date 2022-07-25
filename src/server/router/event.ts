@@ -75,8 +75,11 @@ export const eventRouter = createRouter()
         console.log("NEEDED", hoursNeeded, "AVAILABILE", hoursAvailable);
         for (const exception of ambassador.exceptions) {
           for (
-            let h = exception.start.getHours();
-            h < exception.end.getHours();
+            let h = utcToZonedTime(
+              exception.start,
+              "America/Phoenix"
+            ).getHours();
+            h < utcToZonedTime(exception.end, "America/Phoenix").getHours();
             h++
           ) {
             //TODO: Handle exceptions that span multiple days
@@ -87,8 +90,13 @@ export const eventRouter = createRouter()
         console.log("AFTER EX", hoursAvailable);
         for (const event of ambassador.scheduledEvents) {
           for (
-            let h = event.startTime.getHours();
-            h < event.startTime.getHours() + event.durationHours;
+            let h = utcToZonedTime(
+              event.startTime,
+              "America/Phoenix"
+            ).getHours();
+            h <
+            utcToZonedTime(event.startTime, "America/Phoenix").getHours() +
+              event.durationHours;
             h++
           ) {
             hoursAvailable.delete(h);

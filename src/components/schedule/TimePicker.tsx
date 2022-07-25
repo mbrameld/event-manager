@@ -31,8 +31,10 @@ export const TimePicker = ({
         new Set(
           availableTimes.flatMap((freeHours) =>
             freeHours.filter(
-              (h) =>
-                h <= (freeHours[freeHours.length - 1] ?? 0) - selectedDuration
+              (h, idx) =>
+                idx + selectedDuration < freeHours.length &&
+                freeHours[idx + selectedDuration - 1] ===
+                  h + selectedDuration - 1
             )
           )
         )
