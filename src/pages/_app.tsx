@@ -7,11 +7,10 @@ import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { Container, CssBaseline, Stack, ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ConfirmProvider } from "material-ui-confirm";
-import Image from "next/image";
 import { theme } from "../theme";
-import Username from "../components/Username";
+import Layout from "../components/layout";
 
 const MyApp: AppType = ({
   Component,
@@ -23,20 +22,9 @@ const MyApp: AppType = ({
       <ThemeProvider theme={theme}>
         <ConfirmProvider>
           <SessionProvider session={session}>
-            <Container disableGutters={true} maxWidth="md">
-              <Stack spacing={2} my={2}>
-                <Image
-                  id="rovelogo"
-                  src="/images/RoveMulti.svg"
-                  alt="Rove Logo"
-                  width="100%"
-                  height="100%"
-                  objectFit="contain"
-                />
-                <Username />
-                <Component {...pageProps} />
-              </Stack>
-            </Container>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </SessionProvider>
         </ConfirmProvider>
       </ThemeProvider>
