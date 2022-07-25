@@ -5,7 +5,6 @@ import {
   ScheduledEvent,
 } from "@prisma/client";
 import { eachDayOfInterval, lastDayOfMonth, startOfDay } from "date-fns";
-import { utcToZonedTime } from "date-fns-tz";
 
 export const AmbassadorZod = z.object({
   id: z.string().optional(),
@@ -72,7 +71,7 @@ const toMappedAmbassadors = (
       scheduledEvents: mapThingsToTheStartOfTheirDay(
         ambassador.scheduledEvents.map((se) => {
           return {
-            date: utcToZonedTime(se.startTime, "America/Phoenix"),
+            date: se.startTime,
             startHour: se.startTime.getHours(),
             endHour: se.startTime.getHours() + se.durationHours,
           };
@@ -81,7 +80,7 @@ const toMappedAmbassadors = (
       exceptions: mapThingsToTheStartOfTheirDay(
         ambassador.exceptions.map((ex) => {
           return {
-            date: utcToZonedTime(ex.start, "America/Phoenix"),
+            date: ex.start,
             startHour: ex.start.getHours(),
             endHour: ex.end.getHours(),
           };
@@ -92,6 +91,13 @@ const toMappedAmbassadors = (
   });
 };
 
+/**
+ *
+ * @param year year of
+ * @param month
+ * @param ambassadors
+ * @returns
+ */
 export const calculateFreeHours = (
   month: Date,
   ambassadors: {
@@ -104,12 +110,12 @@ export const calculateFreeHours = (
     toMappedAmbassadors(ambassadors);
   return new Map(
     eachDayOfInterval({
-      start: utcToZonedTime(new Date(month.setDate(1)), "America/Phoenix"),
-      end: lastDayOfMonth(utcToZonedTime(month, "America/Phoenix")),
-    }).map((dayOfInterval) => {
+      start: new Date(month.setDate(1)),
+      end: lastDayOfMonth(month),
+    }).map((d) => {
       const hours = ambassadorsWithDayOfWeekMappedToSchedule.map((s) => {
         // Start with a set of all the hours the ambassador's schedule lets them work this day of the week
-        const interval = s.schedules.get(dayOfInterval.getDay());
+        const interval = s.schedules.get(d.getDay());
         const intervalHours = new Set<number>();
         if (interval) {
           for (let h = interval.startHour; h <= interval.endHour; h++) {
@@ -118,7 +124,7 @@ export const calculateFreeHours = (
         }
         // For each exception on this day, remove hours
         const exceptionsOnThisDay =
-          s.exceptions.get(startOfDay(dayOfInterval).valueOf()) ?? [];
+          s.exceptions.get(startOfDay(d).valueOf()) ?? [];
         for (let exception of exceptionsOnThisDay) {
           for (let h = exception.startHour; h < exception.endHour; h++) {
             intervalHours.delete(h);
@@ -126,7 +132,7 @@ export const calculateFreeHours = (
         }
         // For each scheduled event on this day, remove hours
         const eventsOnThisDay =
-          s.scheduledEvents.get(startOfDay(dayOfInterval).valueOf()) ?? [];
+          s.scheduledEvents.get(startOfDay(d).valueOf()) ?? [];
         for (let event of eventsOnThisDay) {
           for (let h = event.startHour; h < event.endHour; h++) {
             intervalHours.delete(h);
@@ -134,7 +140,7 @@ export const calculateFreeHours = (
         }
         return Array.from(intervalHours);
       });
-      return [dayOfInterval.getDate(), hours] as const;
+      return [d.getDate(), hours] as const;
     })
   );
 };
