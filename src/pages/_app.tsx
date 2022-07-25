@@ -10,7 +10,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ConfirmProvider } from "material-ui-confirm";
 import { theme } from "../theme";
-import Layout from "../components/layout";
+import Layout from "../components/Layout";
 
 const MyApp: AppType = ({
   Component,
