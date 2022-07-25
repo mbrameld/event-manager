@@ -51,10 +51,18 @@ function DatePicker({
       const hasAvailability =
         selectedDuration &&
         timeSlots &&
-        (timeSlots
-          .get(date.getDate())
-          ?.some((hours) => hours.length >= selectedDuration) ??
-          false);
+        new Set(
+          timeSlots
+            .get(date.getDate())
+            ?.flatMap((freeHours) =>
+              freeHours.filter(
+                (h, idx) =>
+                  idx + selectedDuration < freeHours.length &&
+                  freeHours[idx + selectedDuration - 1] ===
+                    h + selectedDuration - 1
+              )
+            )
+        ).size > 0;
       return (
         <CustomPickersDay
           {...pickersDayProps}

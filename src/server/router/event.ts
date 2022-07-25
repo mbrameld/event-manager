@@ -72,7 +72,6 @@ export const eventRouter = createRouter()
         ) {
           hoursAvailable.add(h);
         }
-        console.log("NEEDED", hoursNeeded, "AVAILABILE", hoursAvailable);
         for (const exception of ambassador.exceptions) {
           for (
             let h = utcToZonedTime(
@@ -87,7 +86,6 @@ export const eventRouter = createRouter()
           }
         }
 
-        console.log("AFTER EX", hoursAvailable);
         for (const event of ambassador.scheduledEvents) {
           for (
             let h = utcToZonedTime(
@@ -102,9 +100,7 @@ export const eventRouter = createRouter()
             hoursAvailable.delete(h);
           }
         }
-        console.log("AFTER SE", hoursAvailable);
         if (hoursNeeded.filter((h) => !hoursAvailable.has(h)).length === 0) {
-          console.log("FOUND AMB", ambassador.id);
           ambIdWithAvail = ambassador.id;
           break;
         }
