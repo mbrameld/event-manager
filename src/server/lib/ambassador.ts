@@ -5,6 +5,7 @@ import {
   ScheduledEvent,
 } from "@prisma/client";
 import { eachDayOfInterval, lastDayOfMonth, startOfDay } from "date-fns";
+import { utcToZonedTime } from "date-fns-tz";
 
 export const AmbassadorZod = z.object({
   id: z.string().optional(),
@@ -72,8 +73,13 @@ const toMappedAmbassadors = (
         ambassador.scheduledEvents.map((se) => {
           return {
             date: se.startTime,
-            startHour: se.startTime.getHours(),
-            endHour: se.startTime.getHours() + se.durationHours,
+            startHour: utcToZonedTime(
+              se.startTime,
+              "America/Phoenix"
+            ).getHours(),
+            endHour:
+              utcToZonedTime(se.startTime, "America/Phoenix").getHours() +
+              se.durationHours,
           };
         })
       ),
@@ -81,8 +87,8 @@ const toMappedAmbassadors = (
         ambassador.exceptions.map((ex) => {
           return {
             date: ex.start,
-            startHour: ex.start.getHours(),
-            endHour: ex.end.getHours(),
+            startHour: utcToZonedTime(ex.start, "America/Phoenix").getHours(),
+            endHour: utcToZonedTime(ex.end, "America/Phoenix").getHours(),
           };
         })
       ),
@@ -91,13 +97,6 @@ const toMappedAmbassadors = (
   });
 };
 
-/**
- *
- * @param year year of
- * @param month
- * @param ambassadors
- * @returns
- */
 export const calculateFreeHours = (
   month: Date,
   ambassadors: {
