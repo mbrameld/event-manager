@@ -4,6 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { Alert, Box, Stack } from "@mui/material";
 import Spinner from "../Spinner";
+import { trpc } from "../../utils/trpc";
 
 function EventTypePicker({
   selectedType,
@@ -12,17 +13,18 @@ function EventTypePicker({
   selectedType: string | undefined;
   onSelectionChange: (eventType: string) => void;
 }) {
-  const [availableTypes, loading, error] = [
-    ["Staff Education", "Vendor Day"],
-    false,
-    undefined,
-  ]; //TODO
+  const {
+    isLoading,
+    data: availableTypes,
+    error,
+  } = trpc.useQuery(["event-admin.getEventTypes"]);
 
-  if (loading || availableTypes.length === 0) return <Spinner />;
+  if (isLoading || !availableTypes || availableTypes.length === 0)
+    return <Spinner />;
   if (error)
     return (
       <Box my={2}>
-        <Alert severity="error">{error}</Alert>
+        <Alert severity="error">{error.message}</Alert>
       </Box>
     );
 
@@ -38,8 +40,8 @@ function EventTypePicker({
           onChange={(e) => onSelectionChange(e.target.value)}
         >
           {availableTypes.map((type) => (
-            <MenuItem key={type} value={type}>
-              {type}
+            <MenuItem key={type.id} value={type.name}>
+              {type.name}
             </MenuItem>
           ))}
         </Select>

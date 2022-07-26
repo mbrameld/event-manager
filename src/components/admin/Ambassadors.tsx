@@ -65,7 +65,7 @@ const Ambassadors = () => {
   );
 
   return (
-    <>
+    <Stack>
       <Stack mr={1} direction="row" justifyContent={"space-between"}>
         <StyledTypography variant="h4">Ambassadors</StyledTypography>
         <Button onClick={onNewAmbassador} variant="text" endIcon={<AddIcon />}>
@@ -121,7 +121,7 @@ const Ambassadors = () => {
         onClose={handleClose}
         ambassadorId={ambassadorIdToEdit.current}
       />
-    </>
+    </Stack>
   );
 };
 

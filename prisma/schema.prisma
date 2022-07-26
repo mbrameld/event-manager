@@ -91,12 +91,12 @@ model AmbassadorScheduleException {
 
 model EventType {
     id   Int    @id @default(autoincrement())
-    name String
+    name String @unique
 }
 
 model Duration {
     id       Int @id @default(autoincrement())
-    duration Int
+    duration Int @unique
 }
 
 model ScheduledEvent {

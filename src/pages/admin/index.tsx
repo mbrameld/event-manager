@@ -1,11 +1,18 @@
 import React from "react";
 import Ambassadors from "../../components/admin/Ambassadors";
+import EventTypes from "../../components/admin/EventTypes";
 
 import { GetServerSideProps, NextPage } from "next";
 import { getAuthSession } from "../../server/lib/get-server-session";
+import { Stack } from "@mui/material";
 
 const Admin: NextPage = () => {
-  return <Ambassadors />;
+  return (
+    <Stack direction="column" spacing={4}>
+      <Ambassadors />
+      <EventTypes />
+    </Stack>
+  );
 };
 
 // There is a session prop configured on pageProps in _app.tsx.

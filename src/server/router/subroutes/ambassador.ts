@@ -1,4 +1,4 @@
-import { createRouter } from "./context";
+import { createRouter } from "../context";
 import { z } from "zod";
 import {
   AmbassadorZod,
@@ -6,7 +6,7 @@ import {
   NULL_AMBASSADOR,
   scheduleFormValuesToDatabaseModels,
   schedulesToSparseArray,
-} from "../lib/ambassador";
+} from "../../lib/ambassador";
 
 export const ambassadorRouter = createRouter()
   .query("getById", {

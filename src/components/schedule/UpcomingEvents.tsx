@@ -125,9 +125,13 @@ const UpcomingEvents = ({ userId }: { userId: string }) => {
                   <ListItemText
                     primary={<Typography>{se.ambassador.name}</Typography>}
                     secondary={
-                      <Stack>
-                        <Typography>{se.ambassador.email}</Typography>
-                        <Typography>Rove Ambassador</Typography>
+                      <Stack component="span">
+                        <Typography component="span">
+                          {se.ambassador.email}
+                        </Typography>
+                        <Typography component="span">
+                          Rove Ambassador
+                        </Typography>
                       </Stack>
                     }
                   />
