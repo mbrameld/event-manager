@@ -90,20 +90,19 @@ model AmbassadorScheduleException {
 }
 
 model EventType {
-    id   Int    @id @default(autoincrement())
-    name String @unique
-}
-
-model Duration {
-    id       Int @id @default(autoincrement())
-    duration Int @unique
+    id             Int              @id @default(autoincrement())
+    name           String           @unique
+    description    String
+    iconName       String
+    ScheduledEvent ScheduledEvent[]
 }
 
 model ScheduledEvent {
     id            String     @id @default(cuid())
     startTime     DateTime
-    eventType     String
     durationHours Int
+    eventTypeId   Int
+    eventType     EventType  @relation(fields: [eventTypeId], references: [id])
     ambassador    Ambassador @relation(fields: [ambassadorId], references: [id])
     ambassadorId  String
     owner         User?      @relation(fields: [ownerId], references: [id])

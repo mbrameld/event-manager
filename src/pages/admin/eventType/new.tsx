@@ -2,31 +2,18 @@ import React, { useEffect } from "react";
 
 import { GetServerSideProps, NextPage } from "next";
 import { getAuthSession } from "../../../server/lib/get-server-session";
-import {
-  Alert,
-  Box,
-  Button,
-  Container,
-  Link as MuiLink,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import Link from "next/link";
-import { useFormik } from "formik";
-import { z } from "zod";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+
 import { trpc } from "../../../utils/trpc";
 import { useRouter } from "next/router";
 import { StyledTypography } from "../../../components/styledComponents";
+import EventTypeForm from "../../../components/admin/EventTypeForm";
 
 const NewEventType: NextPage = () => {
   const router = useRouter();
   const utils = trpc.useContext();
-  const saveEventType = trpc.useMutation(["event-admin.createEventType"], {
-    onSuccess() {
-      utils.invalidateQueries(["event-admin.getEventTypes"]);
+  const saveEventType = trpc.useMutation(["event-type.save"], {
+    onSuccess(data) {
+      utils.invalidateQueries(["event-type.getAll"]);
     },
   });
 
@@ -34,62 +21,16 @@ const NewEventType: NextPage = () => {
     if (saveEventType.isSuccess) {
       router.push("/admin");
     }
-  }, [saveEventType.isSuccess]);
-
-  const form = useFormik({
-    initialValues: {
-      name: "",
-    },
-    onSubmit: (values) => {
-      saveEventType.mutate(values);
-    },
-    enableReinitialize: true,
-    validateOnBlur: false,
-    validateOnChange: false,
-    validationSchema: toFormikValidationSchema(
-      z.object({
-        name: z.string(),
-      })
-    ),
-  });
+  }, [router, saveEventType.isSuccess]);
 
   return (
     <>
       <StyledTypography variant="h4">New Event Type</StyledTypography>
-      <Paper>
-        <Container maxWidth="md" component="form" onSubmit={form.handleSubmit}>
-          {saveEventType.isError && (
-            <Box my={2}>
-              <Alert severity="error">An error occurred while saving.</Alert>
-            </Box>
-          )}
-          <TextField
-            fullWidth
-            value={form.values.name}
-            helperText={form.errors.name as string}
-            error={form.errors.name !== undefined}
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-            id="name"
-            name="name"
-            label="Event Type Name"
-            variant="outlined"
-            margin="normal"
-          />
-          <Stack direction="row" alignItems="baseline">
-            <Link href="/admin" passHref>
-              <MuiLink underline="none" variant="overline">
-                <Typography color="secondary" variant="button">
-                  cancel
-                </Typography>
-              </MuiLink>
-            </Link>
-            <Button autoFocus color="primary" type="submit">
-              save
-            </Button>
-          </Stack>
-        </Container>
-      </Paper>
+      <EventTypeForm
+        data={{ name: "", description: "", iconName: "" }}
+        isError={saveEventType.isError}
+        saveEventType={saveEventType.mutate}
+      />
     </>
   );
 };

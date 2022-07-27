@@ -13,8 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/CancelTwoTone";
-import StoreIcon from "@mui/icons-material/StoreTwoTone";
-import SchoolIcon from "@mui/icons-material/SchoolTwoTone";
+import { Icons } from "../Icons";
 import { add, format } from "date-fns";
 import { useConfirm } from "material-ui-confirm";
 import { useCallback, useState } from "react";
@@ -35,16 +34,30 @@ const UpcomingEvents = ({ userId }: { userId: string }) => {
   });
 
   const onCancelEvent = useCallback(
-    (se: ScheduledEvent) => {
+    //TODO: Is there a way to get that type automatically?
+    (
+      se: ScheduledEvent & {
+        ambassador: {
+          name: string;
+          email: string;
+        };
+        eventType: {
+          name: string;
+          iconName: string;
+        };
+      }
+    ) => {
       return (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         confirm({
           confirmationText: "Yes, cancel it!",
           cancellationText: "No, keep it on the schedule!",
           cancellationButtonProps: { color: "secondary" },
-          description: `Really cancel the ${se.eventType} starting ${format(
+          description: `Really cancel the ${
+            se.eventType.name
+          } starting ${format(se.startTime, "EEEE MMM do")} at ${format(
             se.startTime,
-            "EEEE MMM do"
-          )} at ${format(se.startTime, "h aa")}?`,
+            "h aa"
+          )}?`,
         })
           .then(() => {
             setDeleteError(undefined);
@@ -93,20 +106,14 @@ const UpcomingEvents = ({ userId }: { userId: string }) => {
                 </Tooltip>
               }
             >
-              <ListItemIcon>
-                {se.eventType === "Vendor Day" ? (
-                  <StoreIcon color="primary" />
-                ) : (
-                  <SchoolIcon color="primary" />
-                )}
-              </ListItemIcon>
+              <ListItemIcon>{Icons.get(se.eventType.iconName)}</ListItemIcon>
               <Stack
                 direction={{ xs: "column", md: "row" }}
                 spacing={{ xs: 0, md: 10 }}
               >
                 <Stack>
                   <ListItemText
-                    primary={se.eventType}
+                    primary={se.eventType.name}
                     secondary={`${format(
                       se.startTime,
                       "MMMM d, yyyy"

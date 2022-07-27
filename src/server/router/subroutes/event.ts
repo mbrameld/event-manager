@@ -10,7 +10,10 @@ export const eventRouter = createRouter()
     }),
     async resolve({ ctx, input }) {
       return await ctx.prisma.scheduledEvent.findMany({
-        include: { ambassador: { select: { name: true, email: true } } },
+        include: {
+          ambassador: { select: { name: true, email: true } },
+          eventType: { select: { name: true, iconName: true } },
+        },
         where: { ownerId: input.ownerId },
         orderBy: { startTime: "asc" },
       });
@@ -30,7 +33,7 @@ export const eventRouter = createRouter()
     input: z.object({
       ownerId: z.string(),
       durationHours: z.number().min(1).max(24),
-      eventType: z.string(),
+      eventTypeId: z.number(),
       startTime: z.date(),
     }),
     async resolve({ ctx, input }) {
@@ -113,7 +116,7 @@ export const eventRouter = createRouter()
         data: {
           ownerId: input.ownerId,
           ambassadorId: ambIdWithAvail,
-          eventType: input.eventType,
+          eventTypeId: input.eventTypeId,
           startTime: input.startTime,
           durationHours: input.durationHours,
         },

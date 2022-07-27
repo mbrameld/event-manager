@@ -4,11 +4,9 @@ import { Alert, Box, Stack } from "@mui/material";
 import Spinner from "../Spinner";
 
 function EventDurationPicker({
-  selectedType,
   selectedDuration,
   onSelectedDurationChange,
 }: {
-  selectedType: string;
   selectedDuration: number | undefined;
   onSelectedDurationChange: (duration: number) => void;
 }) {

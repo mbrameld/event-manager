@@ -20,12 +20,12 @@ import { StyledTypography } from "../styledComponents";
 import { useConfirm } from "material-ui-confirm";
 
 const EventTypes = () => {
-  const eventTypes = trpc.useQuery(["event-admin.getEventTypes"]);
+  const eventTypes = trpc.useQuery(["event-type.getAll"]);
 
   const utils = trpc.useContext();
-  const deleteEventType = trpc.useMutation(["event-admin.deleteEventType"], {
+  const deleteEventType = trpc.useMutation(["event-type.delete"], {
     onSuccess(data, variables) {
-      utils.invalidateQueries(["event-admin.getEventTypes"]);
+      utils.invalidateQueries(["event-type.getAll"]);
     },
   });
 
@@ -90,14 +90,15 @@ const EventTypes = () => {
                     >
                       <DeleteIcon />
                     </IconButton>
-                    <IconButton
-                      onClick={() => {}}
-                      color="primary"
-                      edge="end"
-                      aria-label="edit event type"
-                    >
-                      <EditIcon />
-                    </IconButton>
+                    <Link href={`/admin/eventType/${eventType.id}`} passHref>
+                      <IconButton
+                        color="primary"
+                        edge="end"
+                        aria-label="edit event type"
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </Link>
                   </Stack>
                 }
               >
