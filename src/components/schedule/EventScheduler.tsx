@@ -54,8 +54,6 @@ function EventScheduler({ userId }: { userId: string }) {
     [confirm, selectedDuration, selectedEventTypeId, createEvent, userId]
   );
 
-  console.log("EVENTTYPEID:", selectedEventTypeId);
-
   return (
     <Stack>
       <StyledTypography variant="h4">Schedule New Event</StyledTypography>

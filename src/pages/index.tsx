@@ -7,6 +7,7 @@ import { getAuthSession } from "../server/lib/get-server-session";
 
 const Schedule: NextPage = () => {
   const { data: session } = useSession();
+  console.log("ROLE:", session?.user?.role);
   if (!session) return null;
 
   return (
