@@ -7,6 +7,7 @@ import {
   scheduleFormValuesToDatabaseModels,
   schedulesToSparseArray,
 } from "../../lib/ambassador";
+import { Role } from "@prisma/client";
 
 export const ambassadorRouter = createRouter()
   .query("getById", {
@@ -16,8 +17,10 @@ export const ambassadorRouter = createRouter()
     async resolve({ ctx, input }) {
       const amb = await ctx.prisma.ambassador.findUnique({
         where: { id: input.id ?? "UNDEFINED" },
-        include: {
+        select: {
+          id: true,
           schedules: true,
+          user: { select: { email: true, name: true } },
         },
       });
 
@@ -26,14 +29,23 @@ export const ambassadorRouter = createRouter()
       }
 
       return {
-        ...amb,
+        id: amb.id,
+        name: amb.user.name ?? "",
+        email: amb.user.email ?? "",
         schedules: schedulesToSparseArray(amb.schedules),
       };
     },
   })
   .query("getAll", {
     async resolve({ ctx }) {
-      return await ctx.prisma.ambassador.findMany({ orderBy: { name: "asc" } });
+      return (
+        await ctx.prisma.ambassador.findMany({
+          select: { id: true, user: { select: { name: true, email: true } } },
+          orderBy: { user: { name: "asc" } },
+        })
+      ).map((amb) => {
+        return { id: amb.id, name: amb.user.name, email: amb.user.email };
+      });
     },
   })
   .query("getAvailability", {
@@ -64,15 +76,29 @@ export const ambassadorRouter = createRouter()
           id: input.id ?? "UNDEFINED",
         },
         create: {
-          name: input.name,
-          email: input.email,
+          user: {
+            connectOrCreate: {
+              where: {
+                email: input.email,
+              },
+              create: {
+                name: input.name,
+                email: input.email,
+                role: Role.AMBASSADOR,
+              },
+            },
+          },
           schedules: {
             create: schedules,
           },
         },
         update: {
-          name: input.name,
-          email: input.email,
+          user: {
+            update: {
+              name: input.name,
+              email: input.email,
+            },
+          },
           schedules: {
             deleteMany: {},
             create: schedules,

@@ -18,7 +18,6 @@ import { add, format } from "date-fns";
 import { useConfirm } from "material-ui-confirm";
 import { useCallback, useState } from "react";
 import { trpc } from "../../utils/trpc";
-import { ScheduledEvent } from "@prisma/client";
 import { StyledTypography } from "../styledComponents";
 
 const UpcomingEvents = ({ userId }: { userId: string }) => {
@@ -34,30 +33,16 @@ const UpcomingEvents = ({ userId }: { userId: string }) => {
   });
 
   const onCancelEvent = useCallback(
-    //TODO: Is there a way to get that type automatically?
-    (
-      se: ScheduledEvent & {
-        ambassador: {
-          name: string;
-          email: string;
-        };
-        eventType: {
-          name: string;
-          iconName: string;
-        };
-      }
-    ) => {
+    (se: { id: string; startTime: Date; eventType: string }) => {
       return (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         confirm({
           confirmationText: "Yes, cancel it!",
           cancellationText: "No, keep it on the schedule!",
           cancellationButtonProps: { color: "secondary" },
-          description: `Really cancel the ${
-            se.eventType.name
-          } starting ${format(se.startTime, "EEEE MMM do")} at ${format(
+          description: `Really cancel the ${se.eventType} starting ${format(
             se.startTime,
-            "h aa"
-          )}?`,
+            "EEEE MMM do"
+          )} at ${format(se.startTime, "h aa")}?`,
         })
           .then(() => {
             setDeleteError(undefined);
@@ -99,7 +84,11 @@ const UpcomingEvents = ({ userId }: { userId: string }) => {
                     color="error"
                     edge="end"
                     aria-label="cancel event"
-                    onClick={onCancelEvent(se)}
+                    onClick={onCancelEvent({
+                      id: se.id,
+                      startTime: se.startTime,
+                      eventType: se.eventType.name,
+                    })}
                   >
                     <CancelIcon />
                   </IconButton>
@@ -130,11 +119,11 @@ const UpcomingEvents = ({ userId }: { userId: string }) => {
                 <Stack>
                   {/* TODO: Make email link */}
                   <ListItemText
-                    primary={<Typography>{se.ambassador.name}</Typography>}
+                    primary={<Typography>{se.ambassador.user.name}</Typography>}
                     secondary={
                       <Stack component="span">
                         <Typography component="span">
-                          {se.ambassador.email}
+                          {se.ambassador.user.email}
                         </Typography>
                         <Typography component="span">
                           Rove Ambassador

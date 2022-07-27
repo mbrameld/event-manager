@@ -39,15 +39,25 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum Role {
+    ADMIN
+    EXECUTIVE
+    AMBASSADOR
+    DISPENSARY
+    UNASSIGNED
+}
+
 model User {
     id              String           @id @default(cuid())
     name            String?
-    email           String?          @unique
+    email           String           @unique
     emailVerified   DateTime?
     image           String?
     accounts        Account[]
     sessions        Session[]
     scheduledEvents ScheduledEvent[]
+    role            Role             @default(UNASSIGNED)
+    Ambassador      Ambassador[]
 }
 
 model VerificationToken {
@@ -58,10 +68,12 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+// END NEXT AUTH
+
 model Ambassador {
     id              String                        @id @default(cuid())
-    email           String                        @unique
-    name            String
+    userId          String
+    user            User                          @relation(fields: [userId], references: [id])
     schedules       AmbassadorSchedule[]
     exceptions      AmbassadorScheduleException[]
     scheduledEvents ScheduledEvent[]

@@ -1,6 +1,7 @@
 import React from "react";
 import Ambassadors from "../../components/admin/Ambassadors";
 import EventTypes from "../../components/admin/EventTypes";
+import Users from "../../components/admin/Users";
 
 import { GetServerSideProps, NextPage } from "next";
 import { getAuthSession } from "../../server/lib/get-server-session";
@@ -11,6 +12,7 @@ const Admin: NextPage = () => {
     <Stack direction="column" spacing={4}>
       <Ambassadors />
       <EventTypes />
+      <Users />
     </Stack>
   );
 };

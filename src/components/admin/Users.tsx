@@ -19,7 +19,7 @@ import Spinner from "../Spinner";
 import { StyledTypography } from "../styledComponents";
 import { useConfirm } from "material-ui-confirm";
 
-const EventTypes = () => {
+const Users = () => {
   const eventTypes = trpc.useQuery(["event-type.getAll"]);
 
   const utils = trpc.useContext();
@@ -54,8 +54,8 @@ const EventTypes = () => {
         justifyContent={"space-between"}
         alignItems="center"
       >
-        <StyledTypography variant="h4">Event Types</StyledTypography>
-        <Link href="/admin/eventTypes/new" passHref>
+        <StyledTypography variant="h4">Users</StyledTypography>
+        <Link href="/admin/users/new" passHref>
           <MuiLink underline="none" variant="overline">
             <Stack direction="row" alignItems="center" spacing={1}>
               <Typography variant="overline" fontSize={16}>
@@ -77,7 +77,7 @@ const EventTypes = () => {
         <List component={Paper}>
           {eventTypes.data.map((eventType, idx) => (
             <div key={eventType.id}>
-              <ListItem
+              {/* <ListItem
                 secondaryAction={
                   <Stack direction="row" spacing={2}>
                     <IconButton
@@ -106,7 +106,7 @@ const EventTypes = () => {
               </ListItem>
               {idx !== eventTypes.data.length - 1 && (
                 <Divider variant="inset" />
-              )}
+              )} */}
             </div>
           ))}
         </List>
@@ -115,4 +115,4 @@ const EventTypes = () => {
   );
 };
 
-export default EventTypes;
+export default Users;

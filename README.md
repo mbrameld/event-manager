@@ -22,6 +22,7 @@
 - Factor out duplicate logic between building free hours and assigning ambassadors
 - Factor out duplicate logic between showing time slots and hilighting dates with free times
 - Disable duration button if no slots for that length exist in the month
+- Show message when no event types
 
 # Ambassador schedules timezone awareness
 

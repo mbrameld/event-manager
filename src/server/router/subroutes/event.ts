@@ -11,7 +11,9 @@ export const eventRouter = createRouter()
     async resolve({ ctx, input }) {
       return await ctx.prisma.scheduledEvent.findMany({
         include: {
-          ambassador: { select: { name: true, email: true } },
+          ambassador: {
+            select: { user: { select: { name: true, email: true } } },
+          },
           eventType: { select: { name: true, iconName: true } },
         },
         where: { ownerId: input.ownerId },
