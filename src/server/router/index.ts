@@ -21,7 +21,7 @@ export const appRouter = createRouter()
   })
   .merge("ambassador.", ambassadorRouter)
   .merge("auth.", authRouter)
-  .merge("dispensary-user.", dispensaryUserRouter)
+  .merge("dispensary.", dispensaryUserRouter)
   .merge("event.", eventRouter)
   .merge("event-type.", eventTypeRouter);
 

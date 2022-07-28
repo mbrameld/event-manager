@@ -21,35 +21,119 @@ export const dispensaryUserRouter = createRouter()
   })
   .query("getAll", {
     async resolve({ ctx }) {
-      return await ctx.prisma.user.findMany({
-        select: { id: true, name: true, email: true },
-        where: { role: { equals: Role.DISPENSARY } },
+      return await ctx.prisma.dispensary.findMany({
+        select: {
+          id: true,
+          name: true,
+          locations: { select: { id: true, name: true } },
+        },
       });
     },
   })
-  .mutation("save", {
+  .mutation("saveLocation", {
+    input: z.object({
+      location: z.object({
+        id: z.string().optional(),
+        dispensaryId: z.string().optional(),
+        name: z.string(),
+        address: z.string(),
+      }),
+      dispensary: z
+        .object({
+          name: z.string(),
+        })
+        .optional(),
+    }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.dispensaryLocation.upsert({
+        where: {
+          id: input.location.id,
+        },
+        create: {
+          name: input.location.name,
+          address: input.location.address,
+          dispensary: {
+            connectOrCreate: {
+              where: {
+                id: input.location.dispensaryId,
+              },
+              create: {
+                name: input.dispensary?.name ?? "NO NAME",
+              },
+            },
+          },
+        },
+        update: {
+          name: input.location.name,
+          address: input.location.address,
+        },
+      });
+    },
+  })
+  .query("getUsers", {
+    input: z.object({
+      dispensaryId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.dispensaryUser.findMany({
+        select: { id: true, user: { select: { name: true, email: true } } },
+        where: { id: { equals: input.dispensaryId } },
+      });
+    },
+  })
+  .mutation("saveUser", {
     input: z.object({
       id: z.string().optional(),
       name: z.string(),
       email: z.string().email(),
+      dispensaryId: z.string(),
+      locationIds: z.array(z.string()),
     }),
     async resolve({ ctx, input }) {
-      return await ctx.prisma.user.upsert({
+      return await ctx.prisma.dispensaryUser.upsert({
         where: {
-          id: input.id ?? "UNDEFINED",
+          id: input.id,
         },
-        create: { ...input, role: Role.DISPENSARY },
-        update: input,
+        create: {
+          dispensary: {
+            connect: {
+              id: input.dispensaryId,
+            },
+          },
+          user: {
+            connectOrCreate: {
+              where: { email: input.email },
+              create: {
+                name: input.name,
+                email: input.email,
+                role: Role.DISPENSARY,
+              },
+            },
+          },
+        },
+        update: {
+          user: {
+            update: {
+              name: input.name,
+              email: input.email,
+            },
+          },
+        },
       });
     },
   })
-  .mutation("delete", {
+  .mutation("deleteUser", {
     input: z.object({
       id: z.string(),
     }),
     async resolve({ ctx, input }) {
-      return await ctx.prisma.user.delete({
+      const dispensaryUser = await ctx.prisma.dispensaryUser.findUnique({
         where: { id: input.id },
       });
+      if (dispensaryUser) {
+        return await ctx.prisma.user.delete({
+          where: { id: dispensaryUser.userId },
+        });
+      }
     },
   });

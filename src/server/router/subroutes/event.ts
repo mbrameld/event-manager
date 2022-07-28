@@ -4,7 +4,7 @@ import { endOfDay, startOfDay } from "date-fns";
 import { utcToZonedTime } from "date-fns-tz";
 
 export const eventRouter = createRouter()
-  .query("getAll", {
+  .query("getUsers", {
     input: z.object({
       ownerId: z.string(),
     }),

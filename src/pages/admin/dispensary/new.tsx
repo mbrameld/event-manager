@@ -6,37 +6,42 @@ import { getAuthSession } from "../../../server/lib/get-server-session";
 import { trpc } from "../../../utils/trpc";
 import { useRouter } from "next/router";
 import { StyledTypography } from "../../../components/styledComponents";
-import DispensaryUserForm from "../../../components/admin/DispensaryUserForm";
 
-const NewDispensaryUser: NextPage = () => {
+const NewDispensaryLocation: NextPage = () => {
   const router = useRouter();
-  const { dispensaryId } = router.query;
   const utils = trpc.useContext();
-  const saveDispensaryUser = trpc.useMutation(["dispensary.saveUser"], {
+  const saveDispensaryLocation = trpc.useMutation(["dispensary.saveLocation"], {
     onSuccess(data) {
       utils.invalidateQueries(["dispensary.getAll"]);
     },
   });
 
   useEffect(() => {
-    if (saveDispensaryUser.isSuccess) {
+    if (saveDispensaryLocation.isSuccess) {
       router.push("/admin");
     }
-  }, [router, saveDispensaryUser.isSuccess]);
+  }, [router, saveDispensaryLocation.isSuccess]);
 
   return (
     <>
-      <StyledTypography variant="h4">New Dispensary User</StyledTypography>
-      <DispensaryUserForm
+      <StyledTypography variant="h4">New Dispensary Location</StyledTypography>
+      {/* Form should have
+            Dispensary dropdown with option to add new
+            name
+            address
+            users list
+        */}
+
+      {/* <DispensaryUserForm
         data={{
           name: "",
           email: "",
           locationIds: [],
           dispensaryId: dispensaryId as string,
         }}
-        isError={saveDispensaryUser.isError}
-        saveDispensaryUser={saveDispensaryUser.mutate}
-      />
+        isError={saveDispensaryLocation.isError}
+        saveDispensaryUser={saveDispensaryLocation.mutate}
+      /> */}
     </>
   );
 };
@@ -55,4 +60,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 };
 
-export default NewDispensaryUser;
+export default NewDispensaryLocation;

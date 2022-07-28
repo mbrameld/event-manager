@@ -14,8 +14,10 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 
 const dispensaryUserSchema = z.object({
   id: z.string().optional(),
+  dispensaryId: z.string(),
   name: z.string(),
   email: z.string().email(),
+  locationIds: z.array(z.string()),
 });
 
 const DispensaryUserForm = ({

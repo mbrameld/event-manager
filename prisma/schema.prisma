@@ -57,7 +57,8 @@ model User {
     sessions        Session[]
     scheduledEvents ScheduledEvent[]
     role            Role             @default(UNASSIGNED)
-    Ambassador      Ambassador[]
+    ambassador      Ambassador?
+    dispensaryUser  DispensaryUser?
 }
 
 model VerificationToken {
@@ -72,33 +73,59 @@ model VerificationToken {
 
 model Ambassador {
     id              String                        @id @default(cuid())
-    userId          String
-    user            User                          @relation(fields: [userId], references: [id])
+    userId          String                        @unique
+    user            User                          @relation(fields: [userId], references: [id], onDelete: Cascade)
     schedules       AmbassadorSchedule[]
     exceptions      AmbassadorScheduleException[]
     scheduledEvents ScheduledEvent[]
 }
 
 model AmbassadorSchedule {
-    id           Int         @id @default(autoincrement())
+    id           Int        @id @default(autoincrement())
     dayOfWeek    Int
     startHour    Int
     endHour      Int
-    ambassador   Ambassador? @relation(fields: [ambassadorId], references: [id], onDelete: Cascade)
-    ambassadorId String?
+    ambassador   Ambassador @relation(fields: [ambassadorId], references: [id], onDelete: Cascade)
+    ambassadorId String
 
     @@unique([ambassadorId, dayOfWeek])
     @@index([ambassadorId])
 }
 
 model AmbassadorScheduleException {
-    id           String      @id @default(cuid())
+    id           String     @id @default(cuid())
     start        DateTime
     end          DateTime
-    ambassador   Ambassador? @relation(fields: [ambassadorId], references: [id], onDelete: Cascade)
-    ambassadorId String?
+    ambassador   Ambassador @relation(fields: [ambassadorId], references: [id], onDelete: Cascade)
+    ambassadorId String
 
     @@index([ambassadorId])
+}
+
+model Dispensary {
+    id        String               @id @default(cuid())
+    name      String
+    locations DispensaryLocation[]
+    users     DispensaryUser[]
+}
+
+model DispensaryUser {
+    id           String               @id @default(cuid())
+    userId       String               @unique
+    user         User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+    dispensary   Dispensary           @relation(fields: [dispensaryId], references: [id], onDelete: Cascade)
+    dispensaryId String
+    isManager    Boolean              @default(false)
+    locations    DispensaryLocation[]
+}
+
+model DispensaryLocation {
+    id              String           @id @default(cuid())
+    name            String
+    address         String
+    dispensary      Dispensary       @relation(fields: [dispensaryId], references: [id], onDelete: Cascade)
+    dispensaryId    String
+    dispensaryUsers DispensaryUser[]
 }
 
 model EventType {

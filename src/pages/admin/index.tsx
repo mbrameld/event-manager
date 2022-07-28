@@ -1,20 +1,25 @@
 import React from "react";
 import Ambassadors from "../../components/admin/Ambassadors";
 import EventTypes from "../../components/admin/EventTypes";
-import Users from "../../components/admin/Users";
 
 import { GetServerSideProps, NextPage } from "next";
 import { getAuthSession } from "../../server/lib/get-server-session";
 import { Stack } from "@mui/material";
-import { Role } from "@prisma/client";
+import Head from "next/head";
+import Dispensaries from "../../components/admin/Dispensaries";
 
 const Admin: NextPage = () => {
   return (
-    <Stack direction="column" spacing={4}>
-      <Ambassadors />
-      <EventTypes />
-      <Users />
-    </Stack>
+    <>
+      <Head>
+        <title>Schedule - Rove Event Manager</title>
+      </Head>
+      <Stack direction="column" spacing={4}>
+        <Ambassadors />
+        <EventTypes />
+        <Dispensaries />
+      </Stack>
+    </>
   );
 };
 

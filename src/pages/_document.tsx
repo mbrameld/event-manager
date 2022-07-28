@@ -4,7 +4,6 @@ export default function Document() {
   return (
     <Html>
       <Head>
-        <title>Rove Event Manager</title>
         <meta name="description" content="Event Manager" />
         <link
           rel="apple-touch-icon"

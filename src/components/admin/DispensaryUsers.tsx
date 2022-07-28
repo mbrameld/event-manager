@@ -20,12 +20,18 @@ import { StyledTypography } from "../styledComponents";
 import { useConfirm } from "material-ui-confirm";
 
 const Users = () => {
-  const dispensaryUsers = trpc.useQuery(["dispensary-user.getAll"]);
+  const dispensaryUsers = trpc.useQuery([
+    "dispensary.getUsers",
+    { dispensaryId: "Stuff" },
+  ]);
 
   const utils = trpc.useContext();
-  const deleteDispensaryUser = trpc.useMutation(["dispensary-user.delete"], {
+  const deleteDispensaryUser = trpc.useMutation(["dispensary.deleteUser"], {
     onSuccess(data, variables) {
-      utils.invalidateQueries(["dispensary-user.getAll"]);
+      utils.invalidateQueries([
+        "dispensary.getUsers",
+        { dispensaryId: "Stuff" },
+      ]);
     },
   });
 
@@ -107,7 +113,7 @@ const Users = () => {
                     </Stack>
                   }
                 >
-                  <ListItemText primary={dispensaryUser.name} />
+                  <ListItemText primary={dispensaryUser.user.name} />
                 </ListItem>
                 {idx !== dispensaryUsers.data.length - 1 && (
                   <Divider variant="inset" />
