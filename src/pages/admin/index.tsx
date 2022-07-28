@@ -8,12 +8,6 @@ import { getAuthSession } from "../../server/lib/get-server-session";
 import { Stack } from "@mui/material";
 import { Role } from "@prisma/client";
 
-const allowedRoles = new Set<Role>([
-  Role.ADMIN,
-  Role.AMBASSADOR,
-  Role.EXECUTIVE,
-]);
-
 const Admin: NextPage = () => {
   return (
     <Stack direction="column" spacing={4}>
@@ -31,22 +25,9 @@ const Admin: NextPage = () => {
 // don't have to check the status for authenticated.
 // If we get into the render method of the page, we can be sure we have a valid sesion
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getAuthSession(ctx);
-  if (!session?.user?.role || !allowedRoles.has(session.user.role)) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-      props: {
-        session,
-      },
-    };
-  }
-
   return {
     props: {
-      session,
+      session: await getAuthSession(ctx),
     },
   };
 };

@@ -8,7 +8,6 @@ import { Role } from "@prisma/client";
 
 const Schedule: NextPage = () => {
   const { data: session } = useSession();
-  console.log("ROLE:", session?.user?.role);
   if (!session) return null;
 
   return (
@@ -33,22 +32,9 @@ const Schedule: NextPage = () => {
 // don't have to check the status for authenticated.
 // If we get into the render method of the page, we can be sure we have a valid sesion
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getAuthSession(ctx);
-  if (!session?.user?.role || session.user.role === Role.UNASSIGNED) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-      props: {
-        session,
-      },
-    };
-  }
-
   return {
     props: {
-      session,
+      session: await getAuthSession(ctx),
     },
   };
 };

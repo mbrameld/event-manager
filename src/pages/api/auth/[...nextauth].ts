@@ -33,7 +33,7 @@ if (env.NODE_ENV === "development") {
 }
 
 export const authOptions: NextAuthOptions = {
-  // Include user.id and role on session
+  // Include user.id and role on token and session
   callbacks: {
     jwt({ token, user }) {
       if (user) {
