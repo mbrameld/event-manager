@@ -1,10 +1,8 @@
 import { GetServerSideProps, NextPage } from "next";
 import UpcomingEvents from "../../components/schedule/UpcomingEvents";
 import EventScheduler from "../../components/schedule/EventScheduler";
-import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { getAuthSession } from "../../server/lib/get-server-session";
-import { Role } from "@prisma/client";
 
 const Schedule: NextPage = () => {
   const { data: session } = useSession();
@@ -12,12 +10,6 @@ const Schedule: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>Event Manager</title>
-        <meta name="description" content="Event Manager" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <UpcomingEvents userId={session.user?.id || "Undefined"} />
 
       <EventScheduler userId={session.user?.id || "Undefined"} />

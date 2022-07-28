@@ -55,14 +55,4 @@ export default withAuth(
   }
 );
 
-// export default withAuth(
-
-//   callbacks: {
-//     authorized({ req, token }) {
-//       return (token?.role && token.role !== Role.UNASSIGNED);
-
-//     },
-//   },
-// });
-
 export const config = { matcher: ["/", "/admin/:path*", "/schedule/:path*"] };
