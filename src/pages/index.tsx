@@ -1,28 +1,17 @@
+import { Role } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
-import UpcomingEvents from "../components/schedule/UpcomingEvents";
-import EventScheduler from "../components/schedule/EventScheduler";
-import Head from "next/head";
-import { useSession } from "next-auth/react";
+import React from "react";
 import { getAuthSession } from "../server/lib/get-server-session";
 
-const Schedule: NextPage = () => {
-  const { data: session } = useSession();
-  console.log("ROLE:", session?.user?.role);
-  if (!session) return null;
+const rolesToRoutes = new Map([
+  [Role.ADMIN, "/admin"],
+  [Role.EXECUTIVE, "/admin"],
+  [Role.DISPENSARY, "/schedule"],
+  [Role.AMBASSADOR, "/admin"],
+]);
 
-  return (
-    <>
-      <Head>
-        <title>Event Manager</title>
-        <meta name="description" content="Event Manager" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <UpcomingEvents userId={session.user?.id || "Undefined"} />
-
-      <EventScheduler userId={session.user?.id || "Undefined"} />
-    </>
-  );
+const Index: NextPage = () => {
+  return <div>Index</div>;
 };
 
 // There is a session prop configured on pageProps in _app.tsx.
@@ -32,11 +21,23 @@ const Schedule: NextPage = () => {
 // don't have to check the status for authenticated.
 // If we get into the render method of the page, we can be sure we have a valid sesion
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getAuthSession(ctx);
+
+  if (!session?.user?.role || session.user.role === Role.UNASSIGNED) {
+    return {
+      notFound: true, //TODO: Redirect to a page where they can request access
+    };
+  }
+
   return {
+    redirect: {
+      destination: rolesToRoutes.get(session.user.role),
+      permanent: false,
+    },
     props: {
-      session: await getAuthSession(ctx),
+      session,
     },
   };
 };
 
-export default Schedule;
+export default Index;

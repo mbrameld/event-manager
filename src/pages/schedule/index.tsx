@@ -1,26 +1,28 @@
-import React from "react";
-import Ambassadors from "../../components/admin/Ambassadors";
-import EventTypes from "../../components/admin/EventTypes";
-import Users from "../../components/admin/Users";
-
 import { GetServerSideProps, NextPage } from "next";
+import UpcomingEvents from "../../components/schedule/UpcomingEvents";
+import EventScheduler from "../../components/schedule/EventScheduler";
+import Head from "next/head";
+import { useSession } from "next-auth/react";
 import { getAuthSession } from "../../server/lib/get-server-session";
-import { Stack } from "@mui/material";
 import { Role } from "@prisma/client";
 
-const allowedRoles = new Set<Role>([
-  Role.ADMIN,
-  Role.AMBASSADOR,
-  Role.EXECUTIVE,
-]);
+const Schedule: NextPage = () => {
+  const { data: session } = useSession();
+  console.log("ROLE:", session?.user?.role);
+  if (!session) return null;
 
-const Admin: NextPage = () => {
   return (
-    <Stack direction="column" spacing={4}>
-      <Ambassadors />
-      <EventTypes />
-      <Users />
-    </Stack>
+    <>
+      <Head>
+        <title>Event Manager</title>
+        <meta name="description" content="Event Manager" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <UpcomingEvents userId={session.user?.id || "Undefined"} />
+
+      <EventScheduler userId={session.user?.id || "Undefined"} />
+    </>
   );
 };
 
@@ -32,7 +34,7 @@ const Admin: NextPage = () => {
 // If we get into the render method of the page, we can be sure we have a valid sesion
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getAuthSession(ctx);
-  if (!session?.user?.role || !allowedRoles.has(session.user.role)) {
+  if (!session?.user?.role || session.user.role === Role.UNASSIGNED) {
     return {
       redirect: {
         destination: "/",
@@ -51,4 +53,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 };
 
-export default Admin;
+export default Schedule;
