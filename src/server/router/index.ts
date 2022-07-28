@@ -6,7 +6,7 @@ import { authRouter } from "./subroutes/auth";
 import { ambassadorRouter } from "./subroutes/ambassador";
 import { eventRouter } from "./subroutes/event";
 import { eventTypeRouter } from "./subroutes/event-type";
-import { dispensaryUserRouter } from "./subroutes/dispensaryUser";
+import { dispensaryUserRouter } from "./subroutes/dispensary-user";
 import { TRPCError } from "@trpc/server";
 
 export const appRouter = createRouter()
