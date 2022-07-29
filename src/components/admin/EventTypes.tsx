@@ -55,7 +55,7 @@ const EventTypes = () => {
         alignItems="center"
       >
         <StyledTypography variant="h4">Event Types</StyledTypography>
-        <Link href="/admin/eventTypes/new" passHref>
+        <Link href="/admin/eventType/new" passHref>
           <MuiLink underline="none" variant="overline">
             <Stack direction="row" alignItems="center" spacing={1}>
               <Typography variant="overline" fontSize={16}>
