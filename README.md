@@ -3,7 +3,7 @@
 - A MySQL database is required, set the DATABASE_URL in .env
 - Make changes to the data model in prisma/schema.prisma
 - Run npx prisma db push to write the database changes to the dev database
-- Usually a restart of the TypeScript server is required to pick up the changes
+- Run yarn to regenerate the prisma client
 
 # Structure
 
