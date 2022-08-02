@@ -1,52 +1,52 @@
 import {
   Stack,
-  Paper,
-  IconButton,
+  // Paper,
+  // IconButton,
   Link as MuiLink,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
+  // List,
+  // ListItem,
+  // ListItemText,
+  // Divider,
   Typography,
-  Collapse,
-  ListItemButton,
+  // Collapse,
+  // ListItemButton,
 } from "@mui/material";
 import Link from "next/link";
-import React, { ReactNode, useCallback, useState } from "react";
+// import React, { ReactNode, useCallback, useState } from "react";
 import { trpc } from "../../utils/trpc";
 import AddIcon from "@mui/icons-material/AddCircleTwoTone";
-import EditIcon from "@mui/icons-material/EditTwoTone";
+// import EditIcon from "@mui/icons-material/EditTwoTone";
 import Spinner from "../Spinner";
 import { StyledTypography } from "../styledComponents";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+// import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
-const ListItemParent = ({
-  text,
-  children,
-}: {
-  text: string;
-  children: ReactNode;
-}) => {
-  const [open, setOpen] = useState(false);
+// const ListItemParent = ({
+//   text,
+//   children,
+// }: {
+//   text: string;
+//   children: ReactNode;
+// }) => {
+//   const [open, setOpen] = useState(false);
 
-  const handleClick = useCallback(() => {
-    setOpen((o) => !o);
-  }, [setOpen]);
+//   const handleClick = useCallback(() => {
+//     setOpen((o) => !o);
+//   }, [setOpen]);
 
-  return (
-    <>
-      <ListItemButton onClick={handleClick}>
-        <ListItemText primary={text} />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {children}
-        </List>
-      </Collapse>
-    </>
-  );
-};
+//   return (
+//     <>
+//       <ListItemButton onClick={handleClick}>
+//         <ListItemText primary={text} />
+//         {open ? <ExpandLess /> : <ExpandMore />}
+//       </ListItemButton>
+//       <Collapse in={open} timeout="auto" unmountOnExit>
+//         <List component="div" disablePadding>
+//           {children}
+//         </List>
+//       </Collapse>
+//     </>
+//   );
+// };
 
 const Dispensaries = () => {
   const dispensaries = trpc.useQuery(["dispensary.getAll"]);
@@ -72,7 +72,7 @@ const Dispensaries = () => {
         </Link>
       </Stack>
       {dispensaries.isLoading && <Spinner />}
-      {!dispensaries.isLoading &&
+      {/* {!dispensaries.isLoading &&
         (!dispensaries.data || dispensaries.data.length === 0) && (
           <StyledTypography m={4} variant="h6">
             No dispensaries.
@@ -118,7 +118,7 @@ const Dispensaries = () => {
               </div>
             ))}
           </List>
-        )}
+        )} */}
     </Stack>
   );
 };
