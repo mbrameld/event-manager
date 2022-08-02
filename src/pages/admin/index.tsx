@@ -17,7 +17,7 @@ const Admin: NextPage = () => {
       <Stack direction="column" spacing={4}>
         <Ambassadors />
         <EventTypes />
-        {/* <Dispensaries /> */}
+        <Dispensaries />
       </Stack>
     </>
   );
