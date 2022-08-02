@@ -1,9 +1,9 @@
 import {
   Stack,
-  // Paper,
+  Paper,
   // IconButton,
   Link as MuiLink,
-  // List,
+  List,
   // ListItem,
   // ListItemText,
   // Divider,
@@ -78,11 +78,11 @@ const Dispensaries = () => {
             No dispensaries.
           </StyledTypography>
         )}
-      {/* {!dispensaries.isLoading &&
-        dispensaries.data &&
+      {!dispensaries.isLoading &&
+        dispensaries.data !== undefined &&
         dispensaries.data.length > 0 && (
           <List component={Paper}>
-            {dispensaries.data.map((dispensary, dIdx) => (
+            {/* {dispensaries.data.map((dispensary, dIdx) => (
               <div key={dispensary.id}>
                 <ListItemParent text={dispensary.name}>
                   {dispensary.locations.map((location, lIdx) => (
@@ -116,9 +116,9 @@ const Dispensaries = () => {
                   <Divider variant="middle" />
                 )}
               </div>
-            ))}
+            ))} */}
           </List>
-        )} */}
+        )}
     </Stack>
   );
 };
