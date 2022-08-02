@@ -72,13 +72,13 @@ const Dispensaries = () => {
         </Link>
       </Stack>
       {dispensaries.isLoading && <Spinner />}
-      {/* {!dispensaries.isLoading &&
+      {!dispensaries.isLoading &&
         (!dispensaries.data || dispensaries.data.length === 0) && (
           <StyledTypography m={4} variant="h6">
             No dispensaries.
           </StyledTypography>
         )}
-      {!dispensaries.isLoading &&
+      {/* {!dispensaries.isLoading &&
         dispensaries.data &&
         dispensaries.data.length > 0 && (
           <List component={Paper}>
