@@ -12,12 +12,12 @@ const Admin: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Schedule - Rove Event Manager</title>
+        <title>Admin - Rove Event Manager</title>
       </Head>
       <Stack direction="column" spacing={4}>
         <Ambassadors />
         <EventTypes />
-        <Dispensaries />
+        {/* <Dispensaries /> */}
       </Stack>
     </>
   );
