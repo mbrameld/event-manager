@@ -105,7 +105,7 @@ const EventTypes = () => {
                 <ListItemText primary={eventType.name} />
               </ListItem>
               {idx !== eventTypes.data.length - 1 && (
-                <Divider variant="inset" />
+                <Divider variant="middle" />
               )}
             </div>
           ))}

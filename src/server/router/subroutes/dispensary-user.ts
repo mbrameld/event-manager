@@ -47,7 +47,7 @@ export const dispensaryUserRouter = createRouter()
     async resolve({ ctx, input }) {
       return await ctx.prisma.dispensaryLocation.upsert({
         where: {
-          id: input.location.id,
+          id: input.location.id ?? "UNDEFINED",
         },
         create: {
           name: input.location.name,
@@ -55,7 +55,7 @@ export const dispensaryUserRouter = createRouter()
           dispensary: {
             connectOrCreate: {
               where: {
-                id: input.location.dispensaryId,
+                id: input.location.dispensaryId ?? "UNDEFINED",
               },
               create: {
                 name: input.dispensary?.name ?? "NO NAME",
@@ -92,7 +92,7 @@ export const dispensaryUserRouter = createRouter()
     async resolve({ ctx, input }) {
       return await ctx.prisma.dispensaryUser.upsert({
         where: {
-          id: input.id,
+          id: input.id ?? "UNDEFINED",
         },
         create: {
           dispensary: {

@@ -121,7 +121,7 @@ const Ambassadors = () => {
                   <ListItemText primary={ambassador.name} />
                 </ListItem>
                 {idx !== ambassadors.data.length - 1 && (
-                  <Divider variant="inset" />
+                  <Divider variant="middle" />
                 )}
               </div>
             ))}

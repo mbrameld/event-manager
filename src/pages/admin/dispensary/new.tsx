@@ -6,6 +6,7 @@ import { getAuthSession } from "../../../server/lib/get-server-session";
 import { trpc } from "../../../utils/trpc";
 import { useRouter } from "next/router";
 import { StyledTypography } from "../../../components/styledComponents";
+import DispensaryLocationForm from "../../../components/admin/DispensaryLocationForm";
 
 const NewDispensaryLocation: NextPage = () => {
   const router = useRouter();
@@ -25,23 +26,13 @@ const NewDispensaryLocation: NextPage = () => {
   return (
     <>
       <StyledTypography variant="h4">New Dispensary Location</StyledTypography>
-      {/* Form should have
-            Dispensary dropdown with option to add new
-            name
-            address
-            users list
-        */}
-
-      {/* <DispensaryUserForm
+      <DispensaryLocationForm
         data={{
-          name: "",
-          email: "",
-          locationIds: [],
-          dispensaryId: dispensaryId as string,
+          location: { name: "", address: "", dispensaryId: "" },
         }}
         isError={saveDispensaryLocation.isError}
-        saveDispensaryUser={saveDispensaryLocation.mutate}
-      /> */}
+        saveDispensaryLocation={saveDispensaryLocation.mutate}
+      />
     </>
   );
 };

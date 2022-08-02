@@ -9,7 +9,7 @@ const adminRouteAllowedRoles = new Set<Role | undefined>([
   Role.EXECUTIVE,
 ]);
 
-const rolesAllowedToAuth = new Set<Role | undefined>([
+const rolesAllowedToAuth = new Set<Role>([
   Role.ADMIN,
   Role.AMBASSADOR,
   Role.DISPENSARY,
@@ -34,6 +34,7 @@ const rolesToRoutes = new Map<Role | undefined, string>([
 */
 export default withAuth(
   function middleware(req) {
+    console.log("ROLE:", req.nextauth.token?.role);
     // If they're requesting the root, rewrite based on role
     const redirectTo = rolesToRoutes.get(req.nextauth.token?.role) ?? "/404";
     if (req.nextUrl.pathname === "/") {
@@ -50,7 +51,8 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({ token }) => rolesAllowedToAuth.has(token?.role),
+      authorized: ({ token }) =>
+        token?.role !== undefined && rolesAllowedToAuth.has(token.role),
     },
   }
 );

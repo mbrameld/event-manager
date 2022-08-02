@@ -81,7 +81,7 @@ const EventTypeForm = ({
           id="name"
           name="name"
           label="Name"
-          variant="outlined"
+          variant="standard"
           margin="normal"
         />
         <TextField
@@ -96,12 +96,13 @@ const EventTypeForm = ({
           id="description"
           name="description"
           label="Description"
-          variant="outlined"
+          variant="standard"
           margin="normal"
         />
         <FormControl fullWidth>
           <InputLabel id="icon-select-label">Icon</InputLabel>
           <Select
+            variant="standard"
             labelId="icon-select-label"
             id="icon-select"
             name="iconName"

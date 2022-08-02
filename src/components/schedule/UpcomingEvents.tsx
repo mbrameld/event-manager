@@ -135,7 +135,7 @@ const UpcomingEvents = ({ userId }: { userId: string }) => {
               </Stack>
             </ListItem>
             {idx !== scheduledEvents.data.length - 1 && (
-              <Divider variant="inset" />
+              <Divider variant="middle" />
             )}
           </Box>
         ))}

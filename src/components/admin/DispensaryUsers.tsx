@@ -116,7 +116,7 @@ const Users = () => {
                   <ListItemText primary={dispensaryUser.user.name} />
                 </ListItem>
                 {idx !== dispensaryUsers.data.length - 1 && (
-                  <Divider variant="inset" />
+                  <Divider variant="middle" />
                 )}
               </div>
             ))}

@@ -75,7 +75,7 @@ const DispensaryUserForm = ({
           id="name"
           name="name"
           label="Name"
-          variant="outlined"
+          variant="standard"
           margin="normal"
         />
         <TextField
@@ -89,7 +89,7 @@ const DispensaryUserForm = ({
           name="email"
           label="Email"
           type="email"
-          variant="outlined"
+          variant="standard"
           margin="normal"
         />
         <Stack
