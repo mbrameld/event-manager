@@ -84,7 +84,7 @@ const Dispensaries = () => {
           <List component={Paper}>
             {dispensaries.data.map((dispensary, dIdx) => (
               <div key={dispensary.id}>
-                <p>{dispensary.name}</p>
+                <p>{dispensary.locations.length}</p>
                 {/* <ListItemParent text={dispensary.name}>
                   {dispensary.locations.map((location, lIdx) => (
                     <div key={location.id}>
