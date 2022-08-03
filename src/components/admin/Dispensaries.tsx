@@ -16,9 +16,10 @@ import React, { ReactNode, useCallback, useState } from "react";
 import { trpc } from "../../utils/trpc";
 import AddIcon from "@mui/icons-material/AddCircleTwoTone";
 import EditIcon from "@mui/icons-material/EditTwoTone";
+import ExpandLess from "@mui/icons-material/ExpandLessTwoTone";
+import ExpandMore from "@mui/icons-material/ExpandMoreTwoTone";
 import Spinner from "../Spinner";
 import { StyledTypography } from "../styledComponents";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 const ListItemParent = ({
   text,
@@ -27,19 +28,19 @@ const ListItemParent = ({
   text: string;
   children: ReactNode;
 }) => {
-  // const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  // const handleClick = useCallback(() => {
-  //   setOpen((o) => !o);
-  // }, [setOpen]);
+  const handleClick = useCallback(() => {
+    setOpen((o) => !o);
+  }, [setOpen]);
 
   return (
     <>
-      <ListItemButton>
+      <ListItemButton onClick={handleClick}>
         <ListItemText primary={text} />
-        {true ? <ExpandLess /> : <ExpandMore />}
+        {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={true} timeout="auto" unmountOnExit>
+      <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding>{children}</List>
       </Collapse>
     </>
