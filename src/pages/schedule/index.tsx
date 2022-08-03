@@ -18,33 +18,33 @@ import {
   StaticDatePicker,
 } from "@mui/x-date-pickers";
 import {
-  Stack,
-  Box,
   Alert,
-  List,
-  Paper,
-  ListItem,
-  Tooltip,
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  Typography,
+  Box,
   Divider,
   FormControl,
+  IconButton,
   InputLabel,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   MenuItem,
+  Paper,
   Select,
-  ToggleButton,
-  ToggleButtonGroup,
+  Stack,
   styled,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+  Tooltip,
+  Typography,
 } from "@mui/material";
-import CancelIcon from "@mui/icons-material/CancelTwoTone";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import StoreIcon from "@mui/icons-material/StoreTwoTone";
+import CancelIcon from "@mui/icons-material/CancelTwoTone";
 import SchoolIcon from "@mui/icons-material/SchoolTwoTone";
-import { StyledTypography } from "../../components/styledComponents";
+import StoreIcon from "@mui/icons-material/StoreTwoTone";
 import Spinner from "../../components/Spinner";
+import { StyledTypography } from "../../components/styledComponents";
 import { formatTime } from "../../lib";
 
 const TODAY = new Date();
