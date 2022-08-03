@@ -8,8 +8,8 @@ import {
   ListItemText,
   Divider,
   Typography,
-  // Collapse,
-  // ListItemButton,
+  Collapse,
+  ListItemButton,
 } from "@mui/material";
 import Link from "next/link";
 import React, { ReactNode, useCallback, useState } from "react";
@@ -27,20 +27,19 @@ const ListItemParent = ({
   text: string;
   children: ReactNode;
 }) => {
-  // const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  // const handleClick = useCallback(() => {
-  //   setOpen((o) => !o);
-  // }, [setOpen]);
+  const handleClick = useCallback(() => {
+    setOpen((o) => !o);
+  }, [setOpen]);
 
   return (
     <>
-      {text}
-      {/* <ListItemButton onClick={handleClick}>
+      <ListItemButton onClick={handleClick}>
         <ListItemText primary={text} />
-        {open ? <ExpandLess /> : <ExpandMore />}
+        {/* {open ? <ExpandLess /> : <ExpandMore />} */}
       </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      {/* <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {children}
         </List>
