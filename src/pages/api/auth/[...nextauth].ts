@@ -5,6 +5,7 @@ import EmailProvider, { EmailConfig } from "next-auth/providers/email";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../server/db/client";
 import { env } from "../../../server/env.mjs";
+import { theme } from "../../../theme";
 
 const THIRTY_DAYS = 30 * 24 * 60 * 60;
 const THIRTY_MINUTES = 30 * 60;
@@ -32,15 +33,35 @@ if (env.NODE_ENV === "development") {
 }
 
 export const authOptions: NextAuthOptions = {
-  // Include user.id on session
+  // Include user.id and role on token and session
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id;
+        session.user.role = token.role;
+      }
+      return session;
+    },
+  },
   session: {
     strategy: "jwt",
     maxAge: THIRTY_DAYS,
     updateAge: THIRTY_MINUTES,
   },
-  // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [EmailProvider(emailOpts)],
+  theme: {
+    brandColor: theme.palette.primary.main,
+    logo: "/images/RoveMulti.svg",
+    colorScheme: "light",
+  },
 };
 
 export default NextAuth(authOptions);

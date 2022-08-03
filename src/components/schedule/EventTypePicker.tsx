@@ -4,28 +4,31 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { Alert, Box, Stack } from "@mui/material";
 import Spinner from "../Spinner";
+import { trpc } from "../../utils/trpc";
 
 function EventTypePicker({
-  selectedType,
+  selectedTypeId,
   onSelectionChange,
 }: {
-  selectedType: string | undefined;
-  onSelectionChange: (eventType: string) => void;
+  selectedTypeId: number | undefined;
+  onSelectionChange: (eventTypeId: number) => void;
 }) {
-  const [availableTypes, loading, error] = [
-    ["Staff Education", "Vendor Day"],
-    false,
-    undefined,
-  ];
+  const {
+    isLoading,
+    data: availableTypes,
+    error,
+  } = trpc.useQuery(["event-type.getAll"]);
 
-  if (loading || availableTypes.length === 0) return <Spinner />;
+  if (isLoading || !availableTypes || availableTypes.length === 0)
+    return <Spinner />;
   if (error)
     return (
       <Box my={2}>
-        <Alert severity="error">{error}</Alert>
+        <Alert severity="error">{error.message}</Alert>
       </Box>
     );
 
+  //TODO: Fix that onSelectionChange casting
   return (
     <Stack my={4} direction="row" justifyContent="center">
       <FormControl sx={{ minWidth: 180, maxWidth: 180 }}>
@@ -33,13 +36,15 @@ function EventTypePicker({
         <Select
           labelId="event-type-label"
           id="event-type-select"
-          value={selectedType || ""}
+          value={selectedTypeId || ""}
           label="Event Type"
-          onChange={(e) => onSelectionChange(e.target.value)}
+          onChange={(e) => {
+            onSelectionChange(parseInt(e.target.value as string));
+          }}
         >
           {availableTypes.map((type) => (
-            <MenuItem key={type} value={type}>
-              {type}
+            <MenuItem key={type.id} value={type.id}>
+              {type.name}
             </MenuItem>
           ))}
         </Select>

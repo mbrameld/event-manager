@@ -63,8 +63,8 @@ const AmbassadorForm = ({
       onSubmit={ambassadorForm.handleSubmit}
     >
       <input type="hidden" id="id" name="id" value={ambassadorForm.values.id} />
-      <Grid container spacing={1} my={2}>
-        <Grid item xs={12} md={6}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6} px={4}>
           <TextField
             fullWidth
             value={ambassadorForm.values.name}
@@ -75,11 +75,11 @@ const AmbassadorForm = ({
             id="name"
             name="name"
             label="Name"
-            variant="outlined"
+            variant="standard"
             margin="normal"
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} px={4}>
           <TextField
             fullWidth
             value={ambassadorForm.values.email}
@@ -90,81 +90,85 @@ const AmbassadorForm = ({
             id="email"
             name="email"
             label="Email"
-            variant="outlined"
+            variant="standard"
             margin="normal"
           />
         </Grid>
+
+        {[
+          [0, "Sunday"] as const,
+          [1, "Monday"] as const,
+          [2, "Tuesday"] as const,
+          [3, "Wednesday"] as const,
+          [4, "Thursday"] as const,
+          [5, "Friday"] as const,
+          [6, "Saturday"] as const,
+        ].map((dayOfWeek) => (
+          <>
+            <Grid item xs={6} px={4}>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id={`${dayOfWeek[1].toLowerCase()}-start-label`}>
+                  {`${dayOfWeek[1]} Start Time`}
+                </InputLabel>
+                <Select
+                  variant="standard"
+                  name={`schedules[${dayOfWeek[0]}].startHour`}
+                  labelId={`${dayOfWeek[1].toLowerCase()}-start-label`}
+                  id={`${dayOfWeek[1].toLowerCase()}-start-select`}
+                  label={`${dayOfWeek[1]} Start Time`}
+                  onChange={ambassadorForm.handleChange}
+                  onBlur={ambassadorForm.handleBlur}
+                  value={
+                    ambassadorForm.values.schedules?.[dayOfWeek[0]]
+                      ?.startHour ?? ""
+                  }
+                >
+                  <MenuItem value="">None</MenuItem>
+                  {[
+                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+                    17, 18, 19, 20, 21, 22, 23,
+                  ].map((startHour) => (
+                    <MenuItem key={startHour} value={startHour}>
+                      {formatTime(startHour)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6} px={4}>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id={`${dayOfWeek[1].toLowerCase()}-end-label`}>
+                  {`${dayOfWeek[1]} End Time`}
+                </InputLabel>
+                <Select
+                  variant="standard"
+                  name={`schedules[${dayOfWeek[0]}].endHour`}
+                  labelId={`${dayOfWeek[1].toLowerCase()}-end-label`}
+                  id={`${dayOfWeek[1].toLowerCase()}-end-select`}
+                  label={`${dayOfWeek[1]} End Time`}
+                  onChange={ambassadorForm.handleChange}
+                  onBlur={ambassadorForm.handleBlur}
+                  value={
+                    ambassadorForm.values.schedules?.[dayOfWeek[0]]?.endHour ??
+                    ""
+                  }
+                >
+                  <MenuItem value="">None</MenuItem>
+                  {[
+                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+                    17, 18, 19, 20, 21, 22, 23,
+                  ].map((endHour) => (
+                    <MenuItem key={endHour} value={endHour}>
+                      {formatTime(endHour)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </>
+        ))}
       </Grid>
 
-      {[
-        [0, "Sunday"] as const,
-        [1, "Monday"] as const,
-        [2, "Tuesday"] as const,
-        [3, "Wednesday"] as const,
-        [4, "Thursday"] as const,
-        [5, "Friday"] as const,
-        [6, "Saturday"] as const,
-      ].map((dayOfWeek) => (
-        <Grid key={dayOfWeek[0]} container spacing={1} my={2}>
-          <Grid item xs={6}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel id={`${dayOfWeek[1].toLowerCase()}-start-label`}>
-                {`${dayOfWeek[1]} Start Time`}
-              </InputLabel>
-              <Select
-                name={`schedules[${dayOfWeek[0]}].startHour`}
-                labelId={`${dayOfWeek[1].toLowerCase()}-start-label`}
-                id={`${dayOfWeek[1].toLowerCase()}-start-select`}
-                label={`${dayOfWeek[1]} Start Time`}
-                onChange={ambassadorForm.handleChange}
-                onBlur={ambassadorForm.handleBlur}
-                value={
-                  ambassadorForm.values.schedules?.[dayOfWeek[0]]?.startHour ??
-                  ""
-                }
-              >
-                <MenuItem value="">None</MenuItem>
-                {[
-                  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-                  18, 19, 20, 21, 22, 23,
-                ].map((startHour) => (
-                  <MenuItem key={startHour} value={startHour}>
-                    {formatTime(startHour)}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel id={`${dayOfWeek[1].toLowerCase()}-end-label`}>
-                {`${dayOfWeek[1]} End Time`}
-              </InputLabel>
-              <Select
-                name={`schedules[${dayOfWeek[0]}].endHour`}
-                labelId={`${dayOfWeek[1].toLowerCase()}-end-label`}
-                id={`${dayOfWeek[1].toLowerCase()}-end-select`}
-                label={`${dayOfWeek[1]} End Time`}
-                onChange={ambassadorForm.handleChange}
-                onBlur={ambassadorForm.handleBlur}
-                value={
-                  ambassadorForm.values.schedules?.[dayOfWeek[0]]?.endHour ?? ""
-                }
-              >
-                <MenuItem value="">None</MenuItem>
-                {[
-                  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-                  18, 19, 20, 21, 22, 23,
-                ].map((endHour) => (
-                  <MenuItem key={endHour} value={endHour}>
-                    {formatTime(endHour)}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-        </Grid>
-      ))}
       <Button autoFocus color="inherit" type="submit">
         save
       </Button>

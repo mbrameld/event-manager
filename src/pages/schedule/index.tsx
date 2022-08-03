@@ -1,24 +1,23 @@
-import React from "react";
-import Ambassadors from "../../components/admin/Ambassadors";
-import EventTypes from "../../components/admin/EventTypes";
-
 import { GetServerSideProps, NextPage } from "next";
+import UpcomingEvents from "../../components/schedule/UpcomingEvents";
+import EventScheduler from "../../components/schedule/EventScheduler";
+import { useSession } from "next-auth/react";
 import { getAuthSession } from "../../server/lib/get-server-session";
-import { Stack } from "@mui/material";
 import Head from "next/head";
-import Dispensaries from "../../components/admin/Dispensaries";
 
-const Admin: NextPage = () => {
+const Schedule: NextPage = () => {
+  const { data: session } = useSession();
+  if (!session) return null;
+
   return (
     <>
       <Head>
-        <title>Admin - Rove Event Manager</title>
+        <title>Schedule - Rove Event Manager</title>
       </Head>
-      <Stack direction="column" spacing={4}>
-        <Ambassadors />
-        <EventTypes />
-        <Dispensaries />
-      </Stack>
+
+      <UpcomingEvents userId={session.user?.id || "Undefined"} />
+
+      <EventScheduler userId={session.user?.id || "Undefined"} />
     </>
   );
 };
@@ -37,4 +36,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 };
 
-export default Admin;
+export default Schedule;

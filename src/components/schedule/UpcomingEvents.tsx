@@ -13,13 +13,11 @@ import {
   Typography,
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/CancelTwoTone";
-import StoreIcon from "@mui/icons-material/StoreTwoTone";
-import SchoolIcon from "@mui/icons-material/SchoolTwoTone";
+import { Icons } from "../Icons";
 import { add, format } from "date-fns";
 import { useConfirm } from "material-ui-confirm";
 import { useCallback, useState } from "react";
 import { trpc } from "../../utils/trpc";
-import { ScheduledEvent } from "@prisma/client";
 import { StyledTypography } from "../styledComponents";
 
 const UpcomingEvents = ({ userId }: { userId: string }) => {
@@ -35,7 +33,7 @@ const UpcomingEvents = ({ userId }: { userId: string }) => {
   });
 
   const onCancelEvent = useCallback(
-    (se: ScheduledEvent) => {
+    (se: { id: string; startTime: Date; eventType: string }) => {
       return (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         confirm({
           confirmationText: "Yes, cancel it!",
@@ -86,27 +84,25 @@ const UpcomingEvents = ({ userId }: { userId: string }) => {
                     color="error"
                     edge="end"
                     aria-label="cancel event"
-                    onClick={onCancelEvent(se)}
+                    onClick={onCancelEvent({
+                      id: se.id,
+                      startTime: se.startTime,
+                      eventType: se.eventType.name,
+                    })}
                   >
                     <CancelIcon />
                   </IconButton>
                 </Tooltip>
               }
             >
-              <ListItemIcon>
-                {se.eventType === "Vendor Day" ? (
-                  <StoreIcon color="primary" />
-                ) : (
-                  <SchoolIcon color="primary" />
-                )}
-              </ListItemIcon>
+              <ListItemIcon>{Icons.get(se.eventType.iconName)}</ListItemIcon>
               <Stack
                 direction={{ xs: "column", md: "row" }}
                 spacing={{ xs: 0, md: 10 }}
               >
                 <Stack>
                   <ListItemText
-                    primary={se.eventType}
+                    primary={se.eventType.name}
                     secondary={`${format(
                       se.startTime,
                       "MMMM d, yyyy"
@@ -123,11 +119,15 @@ const UpcomingEvents = ({ userId }: { userId: string }) => {
                 <Stack>
                   {/* TODO: Make email link */}
                   <ListItemText
-                    primary={<Typography>{se.ambassador.name}</Typography>}
+                    primary={<Typography>{se.ambassador.user.name}</Typography>}
                     secondary={
-                      <Stack>
-                        <Typography>{se.ambassador.email}</Typography>
-                        <Typography>Rove Ambassador</Typography>
+                      <Stack component="span">
+                        <Typography component="span">
+                          {se.ambassador.user.email}
+                        </Typography>
+                        <Typography component="span">
+                          Rove Ambassador
+                        </Typography>
                       </Stack>
                     }
                   />
@@ -135,7 +135,7 @@ const UpcomingEvents = ({ userId }: { userId: string }) => {
               </Stack>
             </ListItem>
             {idx !== scheduledEvents.data.length - 1 && (
-              <Divider variant="inset" />
+              <Divider variant="middle" />
             )}
           </Box>
         ))}

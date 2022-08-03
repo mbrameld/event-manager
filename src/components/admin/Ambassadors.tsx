@@ -7,6 +7,7 @@ import {
   ListItem,
   ListItemText,
   Divider,
+  Typography,
 } from "@mui/material";
 import React, { useCallback, useRef, useState } from "react";
 import { trpc } from "../../utils/trpc";
@@ -65,11 +66,21 @@ const Ambassadors = () => {
   );
 
   return (
-    <>
-      <Stack mr={1} direction="row" justifyContent={"space-between"}>
+    <Stack>
+      <Stack
+        mr={1}
+        direction="row"
+        justifyContent={"space-between"}
+        alignItems="center"
+      >
         <StyledTypography variant="h4">Ambassadors</StyledTypography>
-        <Button onClick={onNewAmbassador} variant="text" endIcon={<AddIcon />}>
-          Add New
+        <Button onClick={onNewAmbassador} variant="text">
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Typography variant="overline" fontSize={16}>
+              Add New
+            </Typography>
+            <AddIcon />
+          </Stack>
         </Button>
       </Stack>
       {ambassadors.isLoading && <Spinner />}
@@ -110,7 +121,7 @@ const Ambassadors = () => {
                   <ListItemText primary={ambassador.name} />
                 </ListItem>
                 {idx !== ambassadors.data.length - 1 && (
-                  <Divider variant="inset" />
+                  <Divider variant="middle" />
                 )}
               </div>
             ))}
@@ -121,7 +132,7 @@ const Ambassadors = () => {
         onClose={handleClose}
         ambassadorId={ambassadorIdToEdit.current}
       />
-    </>
+    </Stack>
   );
 };
 

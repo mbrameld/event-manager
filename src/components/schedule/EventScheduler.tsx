@@ -10,8 +10,8 @@ import EventTypePicker from "./EventTypePicker";
 
 function EventScheduler({ userId }: { userId: string }) {
   const confirm = useConfirm();
-  const [selectedEventType, setSelectedEventType] = useState<
-    string | undefined
+  const [selectedEventTypeId, setSelectedEventTypeId] = useState<
+    number | undefined
   >(undefined);
   const [selectedDuration, setSelectedDuration] = useState<
     number | undefined
@@ -30,7 +30,7 @@ function EventScheduler({ userId }: { userId: string }) {
     (startDateTime: Date) => {
       confirm({
         cancellationButtonProps: { color: "secondary" },
-        title: `Confirm your ${selectedDuration} hour long ${selectedEventType}`,
+        title: `Confirm your ${selectedDuration} hour long ${selectedEventTypeId}`,
         description: `Starting ${format(
           startDateTime,
           "EEEE MMMM do"
@@ -44,14 +44,14 @@ function EventScheduler({ userId }: { userId: string }) {
           createEvent.mutate({
             ownerId: userId,
             durationHours: selectedDuration!,
-            eventType: selectedEventType!,
+            eventTypeId: selectedEventTypeId!,
             startTime: startDateTime,
           });
           setSelectedDate(null);
         })
         .catch(() => {});
     },
-    [confirm, selectedDuration, selectedEventType, createEvent, userId]
+    [confirm, selectedDuration, selectedEventTypeId, createEvent, userId]
   );
 
   return (
@@ -63,17 +63,16 @@ function EventScheduler({ userId }: { userId: string }) {
         }}
       >
         <EventTypePicker
-          selectedType={selectedEventType}
-          onSelectionChange={setSelectedEventType}
+          selectedTypeId={selectedEventTypeId}
+          onSelectionChange={setSelectedEventTypeId}
         />
-        {selectedEventType && (
+        {selectedEventTypeId && (
           <EventDurationSelect
-            selectedType={selectedEventType}
             selectedDuration={selectedDuration}
             onSelectedDurationChange={setSelectedDuration}
           />
         )}
-        {selectedEventType && selectedDuration && (
+        {selectedEventTypeId && selectedDuration && (
           <DateTimePicker
             selectedDuration={selectedDuration}
             selectedDate={selectedDate}
