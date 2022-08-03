@@ -18,7 +18,7 @@ import AddIcon from "@mui/icons-material/AddCircleTwoTone";
 import EditIcon from "@mui/icons-material/EditTwoTone";
 import Spinner from "../Spinner";
 import { StyledTypography } from "../styledComponents";
-// import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 const ListItemParent = ({
   text,
@@ -37,13 +37,11 @@ const ListItemParent = ({
     <>
       <ListItemButton onClick={handleClick}>
         <ListItemText primary={text} />
-        {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+        {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      {/* <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {children}
-        </List>
-      </Collapse> */}
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        {/* <List disablePadding>{children}</List> */}
+      </Collapse>
     </>
   );
 };
