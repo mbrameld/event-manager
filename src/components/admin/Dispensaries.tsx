@@ -27,7 +27,7 @@ const ListItemParent = ({
   text: string;
   children: ReactNode;
 }) => {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
   // const handleClick = useCallback(() => {
   //   setOpen((o) => !o);
@@ -37,9 +37,9 @@ const ListItemParent = ({
     <>
       <ListItemButton>
         <ListItemText primary={text} />
-        {open ? <ExpandLess /> : <ExpandMore />}
+        {true ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse in={true} timeout="auto" unmountOnExit>
         <List disablePadding>{children}</List>
       </Collapse>
     </>
