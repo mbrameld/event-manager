@@ -111,10 +111,10 @@ const Dispensaries = () => {
                     )}
                   </div>
                 ))}
-                {/* </ListItemParent>
+                {/* </ListItemParent> */}
                 {dIdx !== dispensaries.data.length - 1 && (
                   <Divider variant="middle" />
-                )} */}
+                )}
               </div>
             ))}
           </List>
