@@ -1,11 +1,17 @@
-import { useState, useCallback, ComponentType, useMemo } from "react";
+import {
+  useState,
+  useCallback,
+  ComponentType,
+  useMemo,
+  ReactNode,
+} from "react";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 import { useSession } from "next-auth/react";
 import { getAuthSession } from "../../server/lib/get-server-session";
 import { format, add } from "date-fns";
-import { useConfirm } from "material-ui-confirm";
 import { trpc } from "../../utils/trpc";
+import { useConfirm } from "material-ui-confirm";
 import {
   PickersDay,
   PickersDayProps,
@@ -35,12 +41,18 @@ import {
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/CancelTwoTone";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { Icons } from "../../components/Icons";
+import StoreIcon from "@mui/icons-material/StoreTwoTone";
+import SchoolIcon from "@mui/icons-material/SchoolTwoTone";
 import { StyledTypography } from "../../components/styledComponents";
 import Spinner from "../../components/Spinner";
 import { formatTime } from "../../lib";
 
 const TODAY = new Date();
+
+const Icons = new Map<string, ReactNode>([
+  ["store", <StoreIcon key="store" color="primary" />],
+  ["school", <SchoolIcon key="school" color="primary" />],
+]);
 
 const Schedule = () => {
   const { data: session } = useSession();
