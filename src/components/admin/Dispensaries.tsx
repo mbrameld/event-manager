@@ -1,12 +1,12 @@
 import {
   Stack,
   Paper,
-  // IconButton,
+  IconButton,
   Link as MuiLink,
   List,
-  // ListItem,
-  // ListItemText,
-  // Divider,
+  ListItem,
+  ListItemText,
+  Divider,
   Typography,
   // Collapse,
   // ListItemButton,
@@ -15,7 +15,7 @@ import Link from "next/link";
 // import React, { ReactNode, useCallback, useState } from "react";
 import { trpc } from "../../utils/trpc";
 import AddIcon from "@mui/icons-material/AddCircleTwoTone";
-// import EditIcon from "@mui/icons-material/EditTwoTone";
+import EditIcon from "@mui/icons-material/EditTwoTone";
 import Spinner from "../Spinner";
 import { StyledTypography } from "../styledComponents";
 // import { ExpandLess, ExpandMore } from "@mui/icons-material";
@@ -84,35 +84,34 @@ const Dispensaries = () => {
           <List component={Paper}>
             {dispensaries.data.map((dispensary, dIdx) => (
               <div key={dispensary.id}>
-                <p>{dispensary.locations.length}</p>
-                {/* <ListItemParent text={dispensary.name}>
-                  {dispensary.locations.map((location, lIdx) => (
-                    <div key={location.id}>
-                      <ListItem
-                        sx={{ pl: 4 }}
-                        secondaryAction={
-                          <Link
-                            href={`/admin/dispensary/${location.id}`}
-                            passHref
+                {/* <ListItemParent text={dispensary.name}> */}
+                {dispensary.locations.map((location, lIdx) => (
+                  <div key={location.id}>
+                    <ListItem
+                      sx={{ pl: 4 }}
+                      secondaryAction={
+                        <Link
+                          href={`/admin/dispensary/${location.id}`}
+                          passHref
+                        >
+                          <IconButton
+                            color="primary"
+                            edge="end"
+                            aria-label="edit dispensary location"
                           >
-                            <IconButton
-                              color="primary"
-                              edge="end"
-                              aria-label="edit dispensary location"
-                            >
-                              <EditIcon />
-                            </IconButton>
-                          </Link>
-                        }
-                      >
-                        <ListItemText primary={location.name} />
-                      </ListItem>
-                      {lIdx !== dispensary.locations.length - 1 && (
-                        <Divider variant="middle" />
-                      )}
-                    </div>
-                  ))}
-                </ListItemParent>
+                            <EditIcon />
+                          </IconButton>
+                        </Link>
+                      }
+                    >
+                      <ListItemText primary={location.name} />
+                    </ListItem>
+                    {lIdx !== dispensary.locations.length - 1 && (
+                      <Divider variant="middle" />
+                    )}
+                  </div>
+                ))}
+                {/* </ListItemParent>
                 {dIdx !== dispensaries.data.length - 1 && (
                   <Divider variant="middle" />
                 )} */}
