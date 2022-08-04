@@ -14,6 +14,7 @@
 
 # TODO
 
+- Input validation for ambassador times
 - Make ambassador dialog a Next page with a dynamic route instead
 - Page for ambassadors to see their events, link their calendar
 - Error handling/messages
