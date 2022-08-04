@@ -1,6 +1,5 @@
 import type { Config } from "@jest/types";
 
-// Or async function
 const config: Config.InitialOptions = {
   verbose: true,
   transform: {

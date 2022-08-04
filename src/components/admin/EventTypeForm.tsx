@@ -115,7 +115,7 @@ const EventTypeForm = ({
             <MenuItem value="school">
               <SchoolIcon color="primary" />
             </MenuItem>
-            <MenuItem value="vendor">
+            <MenuItem value="store">
               <StoreIcon color="primary" />
             </MenuItem>
           </Select>

@@ -1,7 +1,8 @@
 import React, { ReactNode } from "react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { Container, Stack } from "@mui/material";
-import Username from "./Username";
+import Link from "next/link";
+import { Container, Stack, Typography } from "@mui/material";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
@@ -19,6 +20,26 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <main>{children}</main>
       </Stack>
     </Container>
+  );
+};
+
+const Username = () => {
+  const { data, status } = useSession();
+
+  if (status === "loading") {
+    return null;
+  }
+
+  return (
+    <Stack direction="row" justifyContent="center" alignItems="center">
+      <Typography variant="button">
+        {data?.user?.name ?? "Undefined"} (
+      </Typography>
+      <Link href="/api/auth/signout" color="secondary">
+        sign out
+      </Link>
+      <Typography variant="button">)</Typography>
+    </Stack>
   );
 };
 

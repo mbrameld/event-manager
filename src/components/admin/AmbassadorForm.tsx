@@ -12,9 +12,7 @@ import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { z } from "zod";
 import React from "react";
-
-const formatTime = (time: number) =>
-  `${time > 12 ? time - 12 : time}:00 ${time >= 12 ? "pm" : "am"}`;
+import { formatTime } from "../../lib";
 
 export const AmbassadorZod = z.object({
   id: z.string().optional(),
