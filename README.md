@@ -7,9 +7,10 @@
 
 # Structure
 
-- Routes are defined in server/router/ROUTERNAME.ts and merged in server/router/index.ts
-- Business logic is in server/lib
-- Some complexity is in schedule/TimePicker.tsx calculating sortedTimesForDuration
+- API Routes are defined in src/server/router/subroutes/ROUTERNAME.ts and merged in src/server/router/index.ts
+- Role-based auth stuff lives in src/middleware.ts
+- Most of the complexity is in src/server/lib/ambassador.ts
+- Some complexity is in the TimePicker component on the schedule page calculating sortedTimesForDuration
 
 # TODO
 
@@ -23,9 +24,11 @@
 - Disable duration button if no slots for that length exist in the month
 - Show message when no event types
 
-# NEXT
+# Next
 
-- Eispensary management
+- Dispensary management
+
+# Next Next
 
 # Ambassador schedules timezone awareness
 
