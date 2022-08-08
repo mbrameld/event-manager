@@ -39,7 +39,8 @@ JS dates are stored as seconds since the epoch and displayed in the user's time 
 
 ## Proposed solution
 
-Store the ambassador start and end hours in their local time
-Add the ambassador's time zone to the Ambassador table
-When calculating free time, convert scheduled event and exception times to the ambassador's time zone
-When saving an event, to find an available ambassador convert event time to ambassador's time zone
+1. Store the ambassador start and end hours in their local time
+2. Add the ambassador's time zone to the Ambassador table
+3. When calculating free time, convert scheduled event and exception times to the ambassador's time zone
+4. When saving an event, to find an available ambassador convert event time to ambassador's time zone
+5. Explore the need for allowing dispensary users to choose a time zone, either globally or per event
