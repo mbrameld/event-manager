@@ -1,3 +1,4 @@
+import { AmbassadorSchedule } from "@prisma/client";
 import {
   NULL_AMBASSADOR,
   schedulesToSparseArray,
@@ -108,7 +109,7 @@ test("schedulesToSparseArray handles a full schedule in any order", () => {
       dayOfWeek,
       startHour: dayOfWeek,
       endHour: dayOfWeek,
-      ambassadorId: null,
+      ambassadorId: "",
     };
   });
 
@@ -130,7 +131,7 @@ test("schedulesToSparseArray handles a sparse schedule in any order", () => {
       dayOfWeek,
       startHour: dayOfWeek,
       endHour: dayOfWeek,
-      ambassadorId: null,
+      ambassadorId: "",
     };
   });
 
@@ -165,7 +166,7 @@ test("schedulesToSparseArray ignores out of range schedules", () => {
       dayOfWeek,
       startHour: dayOfWeek,
       endHour: dayOfWeek,
-      ambassadorId: null,
+      ambassadorId: "",
     };
   });
 
