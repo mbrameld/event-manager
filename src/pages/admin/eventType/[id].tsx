@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { GetServerSideProps, NextPage } from "next";
 import { getAuthSession } from "../../../server/lib/get-server-session";
 import { trpc } from "../../../utils/trpc";
-import { StyledTypography } from "../../../components/styledComponents";
+import { StyledTypography } from "../../../components/styled-components";
 import EventTypeForm from "../../../components/admin/EventTypeForm";
 
 const EditEventType: NextPage = () => {

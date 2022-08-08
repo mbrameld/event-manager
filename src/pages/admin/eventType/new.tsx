@@ -5,7 +5,7 @@ import { getAuthSession } from "../../../server/lib/get-server-session";
 
 import { trpc } from "../../../utils/trpc";
 import { useRouter } from "next/router";
-import { StyledTypography } from "../../../components/styledComponents";
+import { StyledTypography } from "../../../components/styled-components";
 import EventTypeForm from "../../../components/admin/EventTypeForm";
 
 const NewEventType: NextPage = () => {

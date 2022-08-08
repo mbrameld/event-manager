@@ -12,7 +12,7 @@ import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { z } from "zod";
 import React from "react";
-import { formatTime } from "../../lib";
+import { formatTime } from "../../lib/time-helpers";
 
 export const AmbassadorZod = z.object({
   id: z.string().optional(),

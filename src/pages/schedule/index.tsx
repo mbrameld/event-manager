@@ -44,8 +44,8 @@ import CancelIcon from "@mui/icons-material/CancelTwoTone";
 import SchoolIcon from "@mui/icons-material/SchoolTwoTone";
 import StoreIcon from "@mui/icons-material/StoreTwoTone";
 import Spinner from "../../components/Spinner";
-import { StyledTypography } from "../../components/styledComponents";
-import { formatTime } from "../../lib";
+import { StyledTypography } from "../../components/styled-components";
+import { formatTime } from "../../lib/time-helpers";
 
 const TODAY = new Date();
 

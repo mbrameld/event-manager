@@ -41,7 +41,7 @@ import EditIcon from "@mui/icons-material/EditTwoTone";
 import ExpandLess from "@mui/icons-material/ExpandLessTwoTone";
 import ExpandMore from "@mui/icons-material/ExpandMoreTwoTone";
 import Spinner from "../../components/Spinner";
-import { StyledTypography } from "../../components/styledComponents";
+import { StyledTypography } from "../../components/styled-components";
 import AmbassadorForm, {
   AmbassadorZodType,
 } from "../../components/admin/AmbassadorForm";
