@@ -45,6 +45,7 @@ import { StyledTypography } from "../../components/styled-components";
 import AmbassadorForm, {
   AmbassadorZodType,
 } from "../../components/admin/AmbassadorForm";
+import SlideUp from "../../components/SlideUp";
 
 const Admin = () => {
   return (
@@ -178,15 +179,6 @@ const Ambassadors = () => {
   );
 };
 
-const Transition = forwardRef(function Transition(
-  props: TransitionProps & {
-    children: ReactElement;
-  },
-  ref: Ref<unknown>
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 const AmbassadorDialog = ({
   open,
   onClose,
@@ -245,7 +237,7 @@ const AmbassadorDialog = ({
       fullScreen
       open={open}
       onClose={onClose}
-      TransitionComponent={Transition}
+      TransitionComponent={SlideUp}
     >
       <AppBar sx={{ position: "relative" }}>
         <Toolbar>
@@ -257,7 +249,11 @@ const AmbassadorDialog = ({
           >
             <CloseIcon />
           </IconButton>
-          <StyledTypography sx={{ ml: 2, flex: 1 }} variant="h6">
+          <StyledTypography
+            color="primary.contrastText"
+            sx={{ ml: 2, flex: 1 }}
+            variant="h6"
+          >
             {!ambassadorId && "New Ambassador"}
           </StyledTypography>
         </Toolbar>
@@ -417,7 +413,7 @@ const Dispensaries = () => {
           <MuiLink underline="none" variant="overline">
             <Stack direction="row" alignItems="center" spacing={1}>
               <Typography variant="overline" fontSize={16}>
-                Add New Location
+                Add New
               </Typography>
               <AddIcon />
             </Stack>

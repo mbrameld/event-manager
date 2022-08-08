@@ -30,19 +30,24 @@ export const dispensaryUserRouter = createRouter()
       });
     },
   })
+  .mutation("saveDispensary", {
+    input: z.object({
+      name: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.dispensary.create({
+        data: input,
+      });
+    },
+  })
   .mutation("saveLocation", {
     input: z.object({
       location: z.object({
         id: z.string().optional(),
-        dispensaryId: z.string().optional(),
+        dispensaryId: z.string(),
         name: z.string(),
         address: z.string(),
       }),
-      dispensary: z
-        .object({
-          name: z.string(),
-        })
-        .optional(),
     }),
     async resolve({ ctx, input }) {
       return await ctx.prisma.dispensaryLocation.upsert({
@@ -53,13 +58,8 @@ export const dispensaryUserRouter = createRouter()
           name: input.location.name,
           address: input.location.address,
           dispensary: {
-            connectOrCreate: {
-              where: {
-                id: input.location.dispensaryId ?? "UNDEFINED",
-              },
-              create: {
-                name: input.dispensary?.name ?? "NO NAME",
-              },
+            connect: {
+              id: input.location.dispensaryId,
             },
           },
         },
