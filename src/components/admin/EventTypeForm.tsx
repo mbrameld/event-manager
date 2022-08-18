@@ -15,7 +15,7 @@ import StoreIcon from "@mui/icons-material/StoreTwoTone";
 import SchoolIcon from "@mui/icons-material/SchoolTwoTone";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import React, { useCallback } from "react";
+import React from "react";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
@@ -36,9 +36,9 @@ const EventTypeForm = ({
   data: z.infer<typeof eventSchema>;
 }) => {
   const router = useRouter();
-  const cancel = useCallback(() => {
+  const onCancel = () => {
     router.push("/admin");
-  }, [router]);
+  };
 
   const form = useFormik({
     initialValues: data,
@@ -132,7 +132,7 @@ const EventTypeForm = ({
             autoFocus
             color="secondary"
             disabled={form.isSubmitting}
-            onClick={cancel}
+            onClick={onCancel}
           >
             cancel
           </Button>
