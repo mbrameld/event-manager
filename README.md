@@ -9,7 +9,7 @@
 
 - API Routes are defined in src/server/router/subroutes/ROUTERNAME.ts and merged in src/server/router/index.ts
 - Role-based auth stuff lives in src/middleware.ts
-- Most of the complexity is in src/server/lib/ambassador.ts
+- Most of the complexity is in src/server/lib/ambassador.ts and the event subrouter
 - Some complexity is in the TimePicker component on the schedule page calculating sortedTimesForDuration
 
 # TODO
