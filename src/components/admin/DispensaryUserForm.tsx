@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import React, { useCallback } from "react";
+import React from "react";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
@@ -30,9 +30,9 @@ const DispensaryUserForm = ({
   data: z.infer<typeof dispensaryUserSchema>;
 }) => {
   const router = useRouter();
-  const cancel = useCallback(() => {
+  const cancel = () => {
     router.push("/admin");
-  }, [router]);
+  };
 
   const form = useFormik({
     initialValues: data,

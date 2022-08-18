@@ -16,14 +16,11 @@ import {
   Dialog,
   AppBar,
   Toolbar,
-  IconButton,
-  Box,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/AddCircleTwoTone";
-import CloseIcon from "@mui/icons-material/Close";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { trpc } from "../../utils/trpc";
@@ -51,9 +48,9 @@ const DispensaryLocationForm = ({
   data: z.infer<typeof locationSchema>;
 }) => {
   const router = useRouter();
-  const cancel = useCallback(() => {
+  const onCancel = () => {
     router.push("/admin");
-  }, [router]);
+  };
 
   const {
     data: dispensaries,
@@ -63,13 +60,13 @@ const DispensaryLocationForm = ({
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleClose = useCallback(() => {
+  const handleClose = () => {
     setDialogOpen(false);
-  }, []);
+  };
 
-  const onAddDispensary = useCallback(() => {
+  const onAddDispensary = () => {
     setDialogOpen(true);
-  }, []);
+  };
 
   const form = useFormik({
     initialValues: data,
@@ -83,10 +80,10 @@ const DispensaryLocationForm = ({
     validationSchema: toFormikValidationSchema(locationSchema),
   });
 
-  const onDispensarySaved = useCallback((newDispensaryId: string) => {
+  const onDispensarySaved = (newDispensaryId: string) => {
     form.setFieldValue("location.dispensaryId", newDispensaryId);
     setDialogOpen(false);
-  }, []);
+  };
 
   return (
     <>
@@ -217,7 +214,7 @@ const DispensaryLocationForm = ({
               autoFocus
               color="secondary"
               disabled={form.isSubmitting}
-              onClick={cancel}
+              onClick={onCancel}
             >
               cancel
             </Button>

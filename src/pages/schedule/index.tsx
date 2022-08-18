@@ -1,10 +1,4 @@
-import {
-  useState,
-  useCallback,
-  ComponentType,
-  useMemo,
-  ReactNode,
-} from "react";
+import { useState, ComponentType, useMemo, ReactNode } from "react";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 import { useSession } from "next-auth/react";
@@ -63,10 +57,11 @@ const Schedule = () => {
       <Head>
         <title>Schedule - Rove Event Manager</title>
       </Head>
+      <Stack spacing={4}>
+        <UpcomingEvents userId={session.user?.id || "Undefined"} />
 
-      <UpcomingEvents userId={session.user?.id || "Undefined"} />
-
-      <EventScheduler userId={session.user?.id || "Undefined"} />
+        <EventScheduler userId={session.user?.id || "Undefined"} />
+      </Stack>
     </>
   );
 };
@@ -83,31 +78,32 @@ const UpcomingEvents = ({ userId }: { userId: string }) => {
     },
   });
 
-  const onCancelEvent = useCallback(
-    (se: { id: string; startTime: Date; eventType: string }) => {
-      return (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        confirm({
-          confirmationText: "Yes, cancel it!",
-          cancellationText: "No, keep it on the schedule!",
-          cancellationButtonProps: { color: "secondary" },
-          description: `Really cancel the ${se.eventType} starting ${format(
-            se.startTime,
-            "EEEE MMM do"
-          )} at ${format(se.startTime, "h aa")}?`,
+  const onCancelEvent = (se: {
+    id: string;
+    startTime: Date;
+    eventType: string;
+  }) => {
+    return (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      confirm({
+        confirmationText: "Yes, cancel it!",
+        cancellationText: "No, keep it on the schedule!",
+        cancellationButtonProps: { color: "secondary" },
+        description: `Really cancel the ${se.eventType} starting ${format(
+          se.startTime,
+          "EEEE MMM do"
+        )} at ${format(se.startTime, "h aa")}?`,
+      })
+        .then(() => {
+          setDeleteError(undefined);
+          try {
+            deleteEvent.mutate({ id: se.id });
+          } catch (error: any) {
+            setDeleteError(error);
+          }
         })
-          .then(() => {
-            setDeleteError(undefined);
-            try {
-              deleteEvent.mutate({ id: se.id });
-            } catch (error: any) {
-              setDeleteError(error);
-            }
-          })
-          .catch(() => {});
-      };
-    },
-    [confirm, deleteEvent]
-  );
+        .catch(() => {});
+    };
+  };
 
   return !scheduledEvents.isLoading &&
     scheduledEvents.data &&
@@ -213,33 +209,30 @@ const EventScheduler = ({ userId }: { userId: string }) => {
     },
   });
 
-  const confirmAndSaveEvent = useCallback(
-    (startDateTime: Date) => {
-      confirm({
-        cancellationButtonProps: { color: "secondary" },
-        title: `Confirm your ${selectedDuration} hour long ${selectedEventTypeId}`,
-        description: `Starting ${format(
-          startDateTime,
-          "EEEE MMMM do"
-        )} from ${format(startDateTime, "h aa")} until ${format(
-          add(startDateTime, { hours: selectedDuration }),
-          "h aa"
-        )} `,
-        confirmationText: "book it",
+  const confirmAndSaveEvent = (startDateTime: Date) => {
+    confirm({
+      cancellationButtonProps: { color: "secondary" },
+      title: `Confirm your ${selectedDuration} hour long ${selectedEventTypeId}`,
+      description: `Starting ${format(
+        startDateTime,
+        "EEEE MMMM do"
+      )} from ${format(startDateTime, "h aa")} until ${format(
+        add(startDateTime, { hours: selectedDuration }),
+        "h aa"
+      )} `,
+      confirmationText: "book it",
+    })
+      .then(() => {
+        createEvent.mutate({
+          ownerId: userId,
+          durationHours: selectedDuration!,
+          eventTypeId: selectedEventTypeId!,
+          startTime: startDateTime,
+        });
+        setSelectedDate(null);
       })
-        .then(() => {
-          createEvent.mutate({
-            ownerId: userId,
-            durationHours: selectedDuration!,
-            eventTypeId: selectedEventTypeId!,
-            startTime: startDateTime,
-          });
-          setSelectedDate(null);
-        })
-        .catch(() => {});
-    },
-    [confirm, selectedDuration, selectedEventTypeId, createEvent, userId]
-  );
+      .catch(() => {});
+  };
 
   return (
     <Stack>
@@ -381,20 +374,17 @@ const DateTimePicker = ({
     { month: calendarView },
   ]);
 
-  const onTimeSelected = useCallback(
-    (startTime: number) => {
-      if (selectedDate) {
-        const startDateTime = new Date(
-          selectedDate.getFullYear(),
-          selectedDate.getMonth(),
-          selectedDate.getDate(),
-          startTime
-        );
-        onStartDateTimeSelected(startDateTime);
-      }
-    },
-    [selectedDate, onStartDateTimeSelected]
-  );
+  const onTimeSelected = (startTime: number) => {
+    if (selectedDate) {
+      const startDateTime = new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        selectedDate.getDate(),
+        startTime
+      );
+      onStartDateTimeSelected(startDateTime);
+    }
+  };
 
   return (
     <>
@@ -474,36 +464,33 @@ function DatePicker({
   selectedDate: Date | null;
   setSelectedDate: (d: Date | null) => void;
 }) {
-  const renderCalendarDay = useCallback(
-    (
-      date: Date,
-      selectedDates: Array<Date | null>,
-      pickersDayProps: PickersDayProps<Date>
-    ) => {
-      const hasAvailability =
-        selectedDuration &&
-        timeSlots &&
-        new Set(
-          timeSlots
-            .get(date.getDate())
-            ?.flatMap((freeHours) =>
-              freeHours.filter(
-                (h, idx) =>
-                  idx + selectedDuration < freeHours.length &&
-                  freeHours[idx + selectedDuration - 1] ===
-                    h + selectedDuration - 1
-              )
+  const renderCalendarDay = (
+    date: Date,
+    selectedDates: Array<Date | null>,
+    pickersDayProps: PickersDayProps<Date>
+  ) => {
+    const hasAvailability =
+      selectedDuration &&
+      timeSlots &&
+      new Set(
+        timeSlots
+          .get(date.getDate())
+          ?.flatMap((freeHours) =>
+            freeHours.filter(
+              (h, idx) =>
+                idx + selectedDuration < freeHours.length &&
+                freeHours[idx + selectedDuration - 1] ===
+                  h + selectedDuration - 1
             )
-        ).size > 0;
-      return (
-        <CustomPickersDay
-          {...pickersDayProps}
-          disabled={pickersDayProps.disabled || !hasAvailability}
-        />
-      );
-    },
-    [timeSlots, selectedDuration]
-  );
+          )
+      ).size > 0;
+    return (
+      <CustomPickersDay
+        {...pickersDayProps}
+        disabled={pickersDayProps.disabled || !hasAvailability}
+      />
+    );
+  };
 
   const noAvailability = useMemo(
     () =>
@@ -515,17 +502,6 @@ function DatePicker({
       }),
     [timeSlots, selectedDuration]
   );
-
-  // This is so the StaticDatePicker only rerenders when the day changes.
-  const todayDate = new Date();
-  const [year, month, date] = [
-    todayDate.getFullYear(),
-    todayDate.getMonth(),
-    todayDate.getDate(),
-  ];
-  const today = useMemo(() => {
-    return new Date(year, month, date);
-  }, [year, month, date]);
 
   return (
     <>
@@ -544,7 +520,7 @@ function DatePicker({
         displayStaticWrapperAs="desktop"
         openTo="day"
         value={selectedDate}
-        minDate={today}
+        minDate={TODAY}
         onMonthChange={setCalendarView}
         onYearChange={setCalendarView}
         onChange={setSelectedDate}

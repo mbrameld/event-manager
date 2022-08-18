@@ -1,19 +1,10 @@
-import React, {
-  forwardRef,
-  ReactElement,
-  ReactNode,
-  Ref,
-  useCallback,
-  useRef,
-  useState,
-} from "react";
+import React, { ReactNode, useRef, useState } from "react";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { getAuthSession } from "../../server/lib/get-server-session";
 import { trpc } from "../../utils/trpc";
 import { useConfirm } from "material-ui-confirm";
-import { TransitionProps } from "@mui/material/transitions";
 import {
   Alert,
   AppBar,
@@ -29,7 +20,6 @@ import {
   ListItemButton,
   ListItemText,
   Paper,
-  Slide,
   Stack,
   Toolbar,
   Typography,
@@ -68,20 +58,20 @@ const Ambassadors = () => {
 
   const ambassadorIdToEdit = useRef<string | undefined>(undefined);
 
-  const onNewAmbassador = useCallback(() => {
+  const onNewAmbassador = () => {
     ambassadorIdToEdit.current = undefined;
     setDialogOpen(true);
-  }, []);
+  };
 
-  const handleClose = useCallback(() => {
+  const handleClose = () => {
     ambassadorIdToEdit.current = undefined;
     setDialogOpen(false);
-  }, []);
+  };
 
-  const onEditAmbassador = useCallback((ambassadorId: string) => {
+  const onEditAmbassador = (ambassadorId: string) => {
     ambassadorIdToEdit.current = ambassadorId;
     setDialogOpen(true);
-  }, []);
+  };
 
   const utils = trpc.useContext();
   const deleteAmbassador = trpc.useMutation(["ambassador.delete"], {
@@ -92,21 +82,18 @@ const Ambassadors = () => {
   });
 
   const confirm = useConfirm();
-  const onDelete = useCallback(
-    (ambassadorId: string) => {
-      confirm({
-        cancellationButtonProps: { color: "secondary" },
-        title: "Really delete the ambassador?",
-        description: "This action cannot be undone!",
-        confirmationText: "Yes",
+  const onDelete = (ambassadorId: string) => {
+    confirm({
+      cancellationButtonProps: { color: "secondary" },
+      title: "Really delete the ambassador?",
+      description: "This action cannot be undone!",
+      confirmationText: "Yes",
+    })
+      .then(() => {
+        deleteAmbassador.mutate({ id: ambassadorId });
       })
-        .then(() => {
-          deleteAmbassador.mutate({ id: ambassadorId });
-        })
-        .catch(() => {});
-    },
-    [confirm, deleteAmbassador]
-  );
+      .catch(() => {});
+  };
 
   return (
     <Stack>
@@ -202,35 +189,32 @@ const AmbassadorDialog = ({
     },
   });
 
-  const saveAmbassadorCallback = useCallback(
-    (ambassador: AmbassadorZodType) => {
-      // This is dumb but with this code here startHour and endHour are always either a number or null
-      // If you remove this code they become empty strings instead of nulls. In the input paramater.
-      for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
-        if (ambassador.schedules?.[dayOfWeek]) {
-          if (
-            (ambassador.schedules[dayOfWeek]?.startHour as unknown) === "" ||
-            (ambassador.schedules[dayOfWeek]?.endHour as unknown) === ""
-          )
-            ambassador.schedules[dayOfWeek] = undefined;
-        }
+  const onSaveAmbassador = (ambassador: AmbassadorZodType) => {
+    // This is dumb but with this code here startHour and endHour are always either a number or null
+    // If you remove this code they become empty strings instead of nulls. In the input paramater.
+    for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
+      if (ambassador.schedules?.[dayOfWeek]) {
+        if (
+          (ambassador.schedules[dayOfWeek]?.startHour as unknown) === "" ||
+          (ambassador.schedules[dayOfWeek]?.endHour as unknown) === ""
+        )
+          ambassador.schedules[dayOfWeek] = undefined;
       }
+    }
 
-      saveAmbassador.mutate({
-        ...ambassador,
-        schedules: ambassador.schedules as
-          | (
-              | {
-                  startHour: number;
-                  endHour: number;
-                }
-              | undefined
-            )[]
-          | undefined,
-      });
-    },
-    [saveAmbassador]
-  );
+    saveAmbassador.mutate({
+      ...ambassador,
+      schedules: ambassador.schedules as
+        | (
+            | {
+                startHour: number;
+                endHour: number;
+              }
+            | undefined
+          )[]
+        | undefined,
+    });
+  };
 
   return (
     <Dialog
@@ -266,10 +250,7 @@ const AmbassadorDialog = ({
       {ambassador.isLoading || !ambassador.data ? (
         <Spinner />
       ) : (
-        <AmbassadorForm
-          data={ambassador.data}
-          onSave={saveAmbassadorCallback}
-        />
+        <AmbassadorForm data={ambassador.data} onSave={onSaveAmbassador} />
       )}
     </Dialog>
   );
@@ -286,21 +267,18 @@ const EventTypes = () => {
   });
 
   const confirm = useConfirm();
-  const onDelete = useCallback(
-    (eventTypeId: number) => {
-      confirm({
-        cancellationButtonProps: { color: "secondary" },
-        title: "Really delete the event type?",
-        description: "This action cannot be undone!",
-        confirmationText: "Yes",
+  const onDelete = (eventTypeId: number) => {
+    confirm({
+      cancellationButtonProps: { color: "secondary" },
+      title: "Really delete the event type?",
+      description: "This action cannot be undone!",
+      confirmationText: "Yes",
+    })
+      .then(() => {
+        deleteEventType.mutate({ id: eventTypeId });
       })
-        .then(() => {
-          deleteEventType.mutate({ id: eventTypeId });
-        })
-        .catch(() => {});
-    },
-    [confirm, deleteEventType]
-  );
+      .catch(() => {});
+  };
 
   return (
     <Stack>
@@ -380,9 +358,9 @@ const ListItemParent = ({
 }) => {
   const [open, setOpen] = useState(false);
 
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     setOpen((o) => !o);
-  }, [setOpen]);
+  };
 
   return (
     <>
