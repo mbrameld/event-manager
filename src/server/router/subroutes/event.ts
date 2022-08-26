@@ -17,7 +17,7 @@ export const eventRouter = createRouter()
           },
           eventType: { select: { name: true, iconName: true } },
         },
-        where: { ownerId: input.ownerId },
+        where: { ownerId: input.ownerId, startTime: { gt: new Date() } },
         orderBy: { startTime: "asc" },
       });
     },
