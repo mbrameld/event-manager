@@ -25,6 +25,7 @@
 - Disable duration button if no slots for that length exist in the month
 - Show message when no event types
 - Standardize and extract common elements from forms
+- Fix algnment of different event types on the upcoming events panel
 
 # Next
 

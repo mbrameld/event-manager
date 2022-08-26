@@ -4,7 +4,7 @@ import {
   schedulesToSparseArray,
   calculateFreeHours, //TODO
   scheduleFormValuesToDatabaseModels,
-} from "../src/server/lib/ambassador";
+} from "./ambassador";
 
 test("scheduleFormValuesToDatabaseModels when schedule is undefined returns an empty array", () => {
   const schedule = undefined;
